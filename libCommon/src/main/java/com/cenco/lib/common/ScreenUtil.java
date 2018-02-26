@@ -1,12 +1,15 @@
 package com.cenco.lib.common;
 
+import android.app.Activity;
 import android.content.Context;
+import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
-public class SizeUtil {
+public class ScreenUtil {
 
 	private static int screenWidth = 0;
 	private static int screenHeight = 0;
+	private static int screenDensityDpi = 0;
 
 	@SuppressWarnings("deprecation")
 	private static void getScreenSize(Context context) {
@@ -44,6 +47,17 @@ public class SizeUtil {
 		}
 		return screenHeight;
 	}
+
+	public static int getScreenDensity(Activity context){
+		if (screenDensityDpi == 0){
+			DisplayMetrics metrics = new DisplayMetrics();
+			context.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+			screenDensityDpi = metrics.densityDpi;
+			return screenDensityDpi;
+		}
+		return screenDensityDpi;
+
+	}
 	
 	/**
 	 * 输出等比例的宽高最小值
@@ -62,6 +76,8 @@ public class SizeUtil {
 		return w < h ? w : h;
 		
 	}
+
+
 	
 	
 }
