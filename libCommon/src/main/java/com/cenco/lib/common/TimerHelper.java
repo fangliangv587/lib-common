@@ -6,7 +6,7 @@ import android.util.Log;
 public class TimerHelper {
 	
 	//倒计时的最大值
-	private  final  int totalSecond;
+	private   int totalSecond;
 	//倒计时临时变了
 	private int tempSecond;
 	//时间间隔
@@ -107,6 +107,15 @@ public class TimerHelper {
 	public TimerHelper(int totalSecond) {
 		this(totalSecond,null);
 		
+	}
+
+	public TimerHelper(TimerListener listener) {
+		this(0,listener);
+
+	}
+
+	public void setTotalSecond(int totalSecond){
+		this.totalSecond = totalSecond;
 	}
 	
 	/**
