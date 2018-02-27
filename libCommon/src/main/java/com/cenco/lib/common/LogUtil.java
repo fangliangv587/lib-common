@@ -16,6 +16,7 @@ public class LogUtil {
             Log.i(tag,mes);
         }
     }
+    
     public static void e(String mes){
         if (printLog){
             Log.e(tag,mes);
