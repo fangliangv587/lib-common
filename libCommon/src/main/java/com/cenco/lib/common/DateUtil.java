@@ -104,10 +104,10 @@ public class DateUtil {
 		String dest = getDateString(destDate, FORMAT_YMDHMS);
 		String start = getDateString(startDate, FORMAT_YMDHMS);
 		String stop = getDateString(stopDate, FORMAT_YMDHMS);
-		if (BuildConfig.printLog){
+
             System.out.print("isInPeriodDate destDate= "+ dest+",start="+start+",stop="+stop);
             LogUtil.i("isInPeriodDate destDate= "+ dest+",start="+start+",stop="+stop);
-        }
+
 
 		if (destDate.equals(startDate) || destDate.equals(stopDate)) {
 			return true;
