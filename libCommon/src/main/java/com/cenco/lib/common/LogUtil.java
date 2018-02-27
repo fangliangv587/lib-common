@@ -9,19 +9,20 @@ import android.util.Log;
 public class LogUtil {
 
     private static final String tag = "xzlibCommon";
+    public static boolean printLog = true;
 
     public static void i(String mes){
-        if (BuildConfig.printLog){
+        if (printLog){
             Log.i(tag,mes);
         }
     }
     public static void e(String mes){
-        if (BuildConfig.printLog){
+        if (printLog){
             Log.e(tag,mes);
         }
     }
     public static void w(String mes){
-        if (BuildConfig.printLog){
+        if (printLog){
             Log.w(tag,mes);
         }
     }
