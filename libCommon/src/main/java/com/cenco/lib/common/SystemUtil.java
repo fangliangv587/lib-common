@@ -2,6 +2,7 @@ package com.cenco.lib.common;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ComponentName;
@@ -18,12 +19,79 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.text.TextUtils;
 import android.util.Log;
 
+import com.cenco.lib.common.log.LogUtils;
+
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 
 public class SystemUtil {
+
+	public static boolean isMainProcess(Context context){
+		// 获取当前包名
+		String packageName = context.getPackageName();
+		// 获取当前进程名
+		String processName = getProcessName(android.os.Process.myPid());
+
+		return processName != null && processName.equals(packageName);
+	}
+
+	public static boolean isMainProcess2(Context context){
+		// 获取当前包名
+		String packageName = context.getPackageName();
+		// 获取当前进程名
+		String processName = getCurrentProcessName(context);
+
+		return processName != null && processName.equals(packageName);
+	}
+
+	/**
+	 * 获取当前进程名
+	 */
+	private static String getCurrentProcessName(Context context) {
+		int pid = android.os.Process.myPid();
+		String processName = "";
+		ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+		for (ActivityManager.RunningAppProcessInfo process : manager.getRunningAppProcesses()) {
+			if (process.pid == pid) {
+				processName = process.processName;
+			}
+		}
+		return processName;
+	}
+
+	/**
+	 * 获取进程号对应的进程名
+	 *
+	 * @param pid 进程号
+	 * @return 进程名
+	 */
+	private static String getProcessName(int pid) {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("/proc/" + pid + "/cmdline"));
+			String processName = reader.readLine();
+			if (!TextUtils.isEmpty(processName)) {
+				processName = processName.trim();
+			}
+			return processName;
+		} catch (Throwable throwable) {
+			throwable.printStackTrace();
+		} finally {
+			try {
+				if (reader != null) {
+					reader.close();
+				}
+			} catch (IOException exception) {
+				exception.printStackTrace();
+			}
+		}
+		return null;
+	}
 
 	/**
 	 * handler 发送消息
@@ -60,12 +128,12 @@ public class SystemUtil {
 						BuildConfig.APPLICATION_ID + ".fileProvider",
 						file);
 				intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                LogUtil.i("take photo from  above android 7");
+                LogUtils.i("take photo from  above android 7");
 				context.startActivityForResult(intent, requestCode);
 				return;
 			}
 
-			LogUtil.i(" takephoto");
+			LogUtils.i(" takephoto");
 			//实例化intent,指向摄像头
 			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			//根据路径实例化图片文件

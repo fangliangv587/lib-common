@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Environment;
 import android.text.format.DateFormat;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ public class FileUtils {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
+    private static String file_root_path ;
     private static final String LINE_SEP = System.getProperty("line.separator");
     private final static String[][] MIME_MapTable = {
             // {后缀名，MIME类型}
@@ -103,6 +105,18 @@ public class FileUtils {
             {".z", "application/x-compress"},
             {".zip", "application/x-zip-compressed"},
             {"", "*/*"}};
+
+
+    /**
+     * 获取log文件路径
+     * @return
+     */
+    public static String getDefaultLogFilePath(){
+        return Environment.getExternalStorageDirectory().getAbsolutePath()+File.separator+"xz"+File.separator+"lib"+File.separator+"log";
+    }
+
+
+
 
     /**
      * 根据文件路径获取文件

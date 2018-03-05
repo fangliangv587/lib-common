@@ -17,6 +17,8 @@ import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
 
+import com.cenco.lib.common.log.LogUtils;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -52,7 +54,7 @@ public class BitmapUtil {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            LogUtil.e(e.getMessage());
+            LogUtils.e(e.getMessage());
         }
         return bmp;
     }
@@ -115,13 +117,13 @@ public class BitmapUtil {
     public static String getBase64(String imgPath) {
         File file = new File(imgPath);
         if (!file.exists()){
-            LogUtil.w("file [" + imgPath +"] not exist");
+            LogUtils.w("file [" + imgPath +"] not exist");
             return null;
         }
 
         Bitmap bitmap = getBitmap(imgPath);
         if (bitmap == null) {
-            LogUtil.w("bitmap not found");
+            LogUtils.w("bitmap not found");
             return null;
         }
         ByteArrayOutputStream out = null;
@@ -136,7 +138,7 @@ public class BitmapUtil {
             return Base64.encodeToString(imgBytes, Base64.DEFAULT);
         } catch (Exception e) {
             // TODO Auto-generated catch block
-            LogUtil.e(e.getMessage());
+            LogUtils.e(e.getMessage());
             return null;
         } finally {
             try {
@@ -145,7 +147,7 @@ public class BitmapUtil {
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
-                LogUtil.e(e.getMessage());
+                LogUtils.e(e.getMessage());
             }
         }
     }
@@ -160,14 +162,14 @@ public class BitmapUtil {
 
         File file = new File(imgPath);
         if (!file.exists()) {
-            LogUtil.w("file not exist");
+            LogUtils.w("file not exist");
             return null;
         }
         try {
             return BitmapFactory.decodeFile(imgPath);
         } catch (Exception e) {
             // TODO Auto-generated catch block
-            LogUtil.e(e.getMessage());
+            LogUtils.e(e.getMessage());
             return null;
         }
 
@@ -223,10 +225,10 @@ public class BitmapUtil {
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            LogUtil.e(e.getMessage());
+            LogUtils.e(e.getMessage());
         } catch (IOException e) {
             e.printStackTrace();
-            LogUtil.e(e.getMessage());
+            LogUtils.e(e.getMessage());
         }
 
         return result;
@@ -259,7 +261,7 @@ public class BitmapUtil {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            LogUtil.e(e.getMessage());
+            LogUtils.e(e.getMessage());
         }
         return degree;
     }

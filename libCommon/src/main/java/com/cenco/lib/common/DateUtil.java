@@ -7,6 +7,8 @@ import java.util.GregorianCalendar;
 
 import android.util.Log;
 
+import com.cenco.lib.common.log.LogUtils;
+
 public class DateUtil {
 
 	public static final String FORMAT_YMDHMS = "yyyy-MM-dd HH:mm:ss";
@@ -106,7 +108,7 @@ public class DateUtil {
 		String stop = getDateString(stopDate, FORMAT_YMDHMS);
 
             System.out.print("isInPeriodDate destDate= "+ dest+",start="+start+",stop="+stop);
-            LogUtil.i("isInPeriodDate destDate= "+ dest+",start="+start+",stop="+stop);
+            LogUtils.i("isInPeriodDate destDate= "+ dest+",start="+start+",stop="+stop);
 
 
 		if (destDate.equals(startDate) || destDate.equals(stopDate)) {
