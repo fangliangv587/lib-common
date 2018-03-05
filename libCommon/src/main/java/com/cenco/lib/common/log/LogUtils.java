@@ -23,7 +23,7 @@ import com.orhanobut.logger.PrettyFormatStrategy;
 
 public class LogUtils {
 
-    private  static final String tag = "xzlibCommon";
+    private  static final String tag = "libCommon";
     private static boolean isInit = false;
     public static boolean debug = true;
 
@@ -34,14 +34,14 @@ public class LogUtils {
 
         //输出到控制台
         FormatStrategy consoleFormat = PrettyFormatStrategy.newBuilder()
-//                .showThreadInfo(false)  // (Optional) Whether to show thread info or not. Default true
-//                .methodCount(0)         // (Optional) How many method line to show. Default 2
+                .showThreadInfo(false)  // (Optional) Whether to show thread info or not. Default true
+                .methodCount(0)         // (Optional) How many method line to show. Default 2
 //                .methodOffset(7)        // (Optional) Hides internal method calls up to offset. Default 5
                 .tag(tag)
                 .build();
         Logger.addLogAdapter(new AndroidLogAdapter(consoleFormat));
 
-        //保存到本地
+        //保存到sd卡
         HandlerThread ht = new HandlerThread("AndroidFileLogger" );
         ht.start();
         Handler handler = new DiskLogStrategy.WriteHandler(ht.getLooper(),logPath);
@@ -71,6 +71,7 @@ public class LogUtils {
         if (!printLog()){
             return;
         }
+
         Logger.d(mes);
     }
     public static void i(String mes){
