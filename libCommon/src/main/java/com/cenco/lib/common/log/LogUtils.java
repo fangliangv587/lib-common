@@ -4,6 +4,8 @@ package com.cenco.lib.common.log;
 import android.content.Context;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.text.TextUtils;
+import android.util.Log;
 
 import com.cenco.lib.common.FileUtils;
 import com.cenco.lib.common.log.CrashHandler;
@@ -23,33 +25,37 @@ import com.orhanobut.logger.PrettyFormatStrategy;
 
 public class LogUtils {
 
-    private  static final String tag = "libCommon";
+    private  static  String commontag = "libCommon";
     private static boolean isInit = false;
     public static boolean debug = true;
 
-    public static void init(Context context,String logPath){
+    public static void init(String tag,boolean isFormat, String logPath){
         if (isInit){
             return;
         }
 
+        if (tag==null){
+            tag = commontag;
+        }
+
         //输出到控制台
-        FormatStrategy consoleFormat = PrettyFormatStrategy.newBuilder()
-                .showThreadInfo(false)  // (Optional) Whether to show thread info or not. Default true
-                .methodCount(0)         // (Optional) How many method line to show. Default 2
-//                .methodOffset(7)        // (Optional) Hides internal method calls up to offset. Default 5
-                .tag(tag)
-                .build();
-        Logger.addLogAdapter(new AndroidLogAdapter(consoleFormat));
+        FormatStrategy strategy = null;
+        if (isFormat){
+            strategy= PrettyFormatStrategy.newBuilder()
+                    .tag(tag)
+                    .build();
+        }else {
+            strategy = SimpleFormatStrategy.newBuilder()
+                    .tag(tag)
+                    .build();
+        }
+
+        Logger.addLogAdapter(new AndroidLogAdapter(strategy));
 
         //保存到sd卡
-        HandlerThread ht = new HandlerThread("AndroidFileLogger" );
-        ht.start();
-        Handler handler = new DiskLogStrategy.WriteHandler(ht.getLooper(),logPath);
-        LogStrategy logStrategy = new DiskLogStrategy(handler);
-
-        FormatStrategy formatStrategy = CsvFormatStrategy.newBuilder()
-                .logStrategy(logStrategy)
+        FormatStrategy formatStrategy = TxtFormatStrategy.newBuilder()
                 .tag(tag)
+                .logPath(logPath)
                 .build();
         Logger.addLogAdapter(new DiskLogAdapter(formatStrategy));
 
@@ -59,37 +65,71 @@ public class LogUtils {
         isInit = true;
     }
 
-    public static void init(Context context){
-        init(context,FileUtils.getDefaultLogFilePath());
+    public static void init(){
+        init(null);
     }
+
+    public static void init(String generalTag){
+        init(generalTag,false);
+    }
+    public static void init(String generalTag,boolean isFormat){
+        init(generalTag,isFormat,FileUtils.getDefaultLogFilePath());
+    }
+
 
     private static boolean printLog(){
         return  isInit && debug;
     }
 
-    public static void d(String mes){
+    public static void d(String tag,String mes){
         if (!printLog()){
             return;
         }
-
+        if (!TextUtils.isEmpty(tag)){
+            Logger.t(tag);
+        }
         Logger.d(mes);
     }
-    public static void i(String mes){
+    public static void i(String tag,String mes){
         if (!printLog()){
             return;
+        }
+        if (!TextUtils.isEmpty(tag)){
+            Logger.t(tag);
         }
         Logger.i(mes);
     }
-    public static void w(String mes){
+    public static void w(String tag,String mes){
         if (!printLog()){
             return;
+        }
+        if (!TextUtils.isEmpty(tag)){
+            Logger.t(tag);
         }
         Logger.w(mes);
     }
-    public static void e(String mes){
+    public static void e(String tag,String mes){
         if (!printLog()){
             return;
         }
+        if (!TextUtils.isEmpty(tag)){
+            Logger.t(tag);
+        }
         Logger.e(mes);
     }
+
+
+    public static void d(String mes){
+       d(null,mes);
+    }
+    public static void i(String mes){
+        i(null,mes);
+    }
+    public static void w(String mes){
+        w(null,mes);
+    }
+    public static void e(String mes){
+        e(null,mes);
+    }
+
 }
