@@ -1,20 +1,13 @@
 package com.cenco.lib.common.log;
 
 
-import android.content.Context;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.cenco.lib.common.FileUtils;
-import com.cenco.lib.common.log.CrashHandler;
-import com.cenco.lib.common.log.DiskLogStrategy;
 import com.orhanobut.logger.AndroidLogAdapter;
-import com.orhanobut.logger.CsvFormatStrategy;
 import com.orhanobut.logger.DiskLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
-import com.orhanobut.logger.LogStrategy;
 import com.orhanobut.logger.Logger;
 import com.orhanobut.logger.PrettyFormatStrategy;
 
@@ -37,6 +30,11 @@ public class LogUtils {
         if (tag==null){
             tag = commontag;
         }
+
+        if (tag !=null){
+            commontag = tag;
+        }
+
 
         //输出到控制台
         FormatStrategy strategy = null;
@@ -81,8 +79,13 @@ public class LogUtils {
         return  isInit && debug;
     }
 
-    public static void d(String tag,String mes){
+    public static void d(String tag,String mes,boolean save){
         if (!printLog()){
+            return;
+        }
+        if (!save){
+            String tag1 = formatTag(tag);
+            Log.d(tag1,mes);
             return;
         }
         if (!TextUtils.isEmpty(tag)){
@@ -90,34 +93,67 @@ public class LogUtils {
         }
         Logger.d(mes);
     }
-    public static void i(String tag,String mes){
+    public static void i(String tag,String mes,boolean save){
         if (!printLog()){
             return;
         }
+        if (!save){
+            String tag1 = formatTag(tag);
+            Log.d(tag1,mes);
+            return;
+        }
+
         if (!TextUtils.isEmpty(tag)){
             Logger.t(tag);
         }
         Logger.i(mes);
     }
-    public static void w(String tag,String mes){
+    public static void w(String tag,String mes,boolean save){
         if (!printLog()){
             return;
         }
+
+        if (!save){
+            String tag1 = formatTag(tag);
+            Log.d(tag1,mes);
+            return;
+        }
+
         if (!TextUtils.isEmpty(tag)){
             Logger.t(tag);
         }
         Logger.w(mes);
     }
-    public static void e(String tag,String mes){
+    public static void e(String tag,String mes,boolean save){
         if (!printLog()){
             return;
         }
+
+        if (!save){
+            String tag1 = formatTag(tag);
+            Log.d(tag1,mes);
+            return;
+        }
+
         if (!TextUtils.isEmpty(tag)){
             Logger.t(tag);
         }
         Logger.e(mes);
     }
 
+
+    public static void d(String tag,String mes){
+        d(tag,mes,true);
+    }
+    public static void i(String tag,String mes){
+        i(tag,mes,true);
+    }
+    public static void w(String tag,String mes){
+        w(tag,mes,true);
+    }
+    public static void e(String tag,String mes){
+        e(tag,mes,true);
+    }
 
     public static void d(String mes){
        d(null,mes);
@@ -132,4 +168,10 @@ public class LogUtils {
         e(null,mes);
     }
 
+    private static String formatTag(String tag) {
+        if (!TextUtils.isEmpty(tag) && !TextUtils.equals(commontag, tag)) {
+            return commontag + "-" + tag;
+        }
+        return commontag;
+    }
 }

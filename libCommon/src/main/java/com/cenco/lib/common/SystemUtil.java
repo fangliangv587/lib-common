@@ -8,6 +8,7 @@ import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -28,8 +29,62 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 
 public class SystemUtil {
+
+	/**
+	 * 获取本地软件版本号
+	 */
+	public static int getVersionCode(Context ctx) {
+		int localVersion = 0;
+		try {
+			PackageInfo packageInfo = ctx.getApplicationContext()
+					.getPackageManager()
+					.getPackageInfo(ctx.getPackageName(), 0);
+			localVersion = packageInfo.versionCode;
+		} catch (PackageManager.NameNotFoundException e) {
+			e.printStackTrace();
+		}
+		return localVersion;
+	}
+
+	/**
+	 * 获取本地软件版本号名称
+	 */
+	public static String getVersionName(Context ctx) {
+		String localVersion = "";
+		try {
+			PackageInfo packageInfo = ctx.getApplicationContext()
+					.getPackageManager()
+					.getPackageInfo(ctx.getPackageName(), 0);
+			localVersion = packageInfo.versionName;
+		} catch (PackageManager.NameNotFoundException e) {
+			e.printStackTrace();
+		}
+		return localVersion;
+	}
+
+	/**
+	 * 判断某一Service是否正在运行
+	 *
+	 * @param context     上下文
+	 * @param serviceName Service的全路径： 包名 + service的类名
+	 * @return true 表示正在运行，false 表示没有运行
+	 */
+	public static boolean isServiceRunning(Context context, String serviceName) {
+		ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+		List<ActivityManager.RunningServiceInfo> runningServiceInfos = am.getRunningServices(Integer.MAX_VALUE);
+		if (runningServiceInfos.size() <= 0) {
+			return false;
+		}
+		for (ActivityManager.RunningServiceInfo serviceInfo : runningServiceInfos) {
+			if (serviceInfo.service.getClassName().equals(serviceName)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public static boolean isMainProcess(Context context){
 		// 获取当前包名
