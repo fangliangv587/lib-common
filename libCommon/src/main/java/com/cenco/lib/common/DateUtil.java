@@ -39,9 +39,16 @@ public class DateUtil {
         int year = calendar.get(Calendar.YEAR);
         return isLeapYear(year);
     }
+
+	/**
+	 * 判断是否是闰年
+	 * @param year
+	 * @return
+	 */
 	public static boolean isLeapYear(int year) {
 		return (year % 4 == 0) && (year % 100 != 0) || (year % 400 == 0);
 	}
+
 
 	/**
 	 * date 转 string
