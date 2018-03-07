@@ -1,7 +1,6 @@
 package com.cenco.lib.common;
 
 import android.text.TextUtils;
-import android.widget.EditText;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,9 +17,10 @@ public class RegexUtil {
 			return false;
 		}
 		String regx = "[0-9]{17}x";
+		String reg0 = "[0-9]{17}X";
 		String reg1 = "[0-9]{15}";
 		String regex = "[0-9]{18}";
-		return text.matches(regx) || text.matches(reg1) || text.matches(regex);
+		return text.matches(regx) || text.matches(reg1) || text.matches(regex) || text.matches(reg0);
 
 	}
 

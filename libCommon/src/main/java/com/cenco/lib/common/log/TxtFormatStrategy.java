@@ -10,7 +10,6 @@ import com.orhanobut.logger.*;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 import static com.orhanobut.logger.Logger.ASSERT;
 import static com.orhanobut.logger.Logger.DEBUG;

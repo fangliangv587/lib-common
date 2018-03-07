@@ -4,9 +4,6 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.orhanobut.logger.FormatStrategy;
-import com.orhanobut.logger.LogStrategy;
-import com.orhanobut.logger.LogcatLogStrategy;
-import com.orhanobut.logger.PrettyFormatStrategy;
 
 /**
  * Created by Administrator on 2018/3/5.
