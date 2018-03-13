@@ -6,7 +6,7 @@ android {
 
 
     defaultConfig {
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -29,12 +29,18 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.android.support:appcompat-v7:26.1.0'
+
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.orhanobut:logger:2.1.1'
-    compile 'com.alibaba:fastjson:1.1.68.android'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'//图片加载库
+    implementation 'com.orhanobut:logger:2.1.1'//log日志库
+    implementation 'com.google.code.gson:gson:2.8.0'//json解析库
+
+    implementation 'com.readystatesoftware.chuck:library:1.0.4'
+    compile 'com.lzy.net:okgo:3.0.4'//网络请求库
+    implementation 'com.lzy.net:okrx2:2.0.2'//rxjava2依赖
+    implementation 'com.lzy.net:okserver:2.0.5'//上传下载库
+
 }

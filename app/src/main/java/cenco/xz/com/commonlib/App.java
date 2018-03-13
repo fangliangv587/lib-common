@@ -2,6 +2,7 @@ package cenco.xz.com.commonlib;
 
 import android.app.Application;
 
+import com.cenco.lib.common.http.HttpUtil;
 import com.cenco.lib.common.log.LogUtils;
 
 /**
@@ -12,6 +13,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        LogUtils.init();
+        LogUtils.init("libsample");
+        HttpUtil.init(this);
     }
 }
