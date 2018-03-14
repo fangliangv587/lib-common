@@ -14,6 +14,6 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         LogUtils.init("libsample");
-        HttpUtil.init(this);
+        HttpUtil.init(this,false,"mockapi");
     }
 }

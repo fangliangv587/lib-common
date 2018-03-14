@@ -80,12 +80,12 @@ public abstract class JsonCallback<T> extends AbsCallback<T> {
                 Type genType = getClass().getGenericSuperclass();
                 type = ((ParameterizedType) genType).getActualTypeArguments()[0];
             } else {
-                JsonConvert<T> convert = new JsonConvert<>(clazz);
+                GsonConvert<T> convert = new GsonConvert<>(clazz);
                 return convert.convertResponse(response);
             }
         }
 
-        JsonConvert<T> convert = new JsonConvert<>(type);
+        GsonConvert<T> convert = new GsonConvert<>(type);
         return convert.convertResponse(response);
     }
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.cenco.lib.common.http;
+package com.cenco.lib.common.json;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -35,10 +35,10 @@ import java.lang.reflect.Type;
  * 修订历史：
  * ================================================
  */
-public class Convert {
+public class GsonUtil {
 
     private static Gson create() {
-        return Convert.GsonHolder.gson;
+        return GsonUtil.GsonHolder.gson;
     }
 
     private static class GsonHolder {

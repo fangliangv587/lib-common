@@ -486,6 +486,8 @@ public class IOUtils {
         return readFile2String(file, null);
     }
 
+
+
     /**
      * 读取文件到字符串中
      *
@@ -508,6 +510,30 @@ public class IOUtils {
                 sb.append(line);
                 while ((line = reader.readLine()) != null) {
                     sb.append(LINE_SEP).append(line);
+                }
+            }
+            return sb.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            closeIO(reader);
+        }
+    }
+
+
+    public static String readStream2String(InputStream inputStream){
+        BufferedReader reader = null;
+        try {
+            StringBuilder sb = new StringBuilder();
+
+            reader = new BufferedReader(new InputStreamReader(inputStream));
+
+            String line;
+            if ((line = reader.readLine()) != null) {
+                sb.append(line);
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
                 }
             }
             return sb.toString();

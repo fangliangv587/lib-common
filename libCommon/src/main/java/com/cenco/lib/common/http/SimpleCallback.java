@@ -1,12 +1,14 @@
 package com.cenco.lib.common.http;
 
 import com.lzy.okgo.model.Response;
+import com.lzy.okgo.request.base.Request;
 
 /**
  * Created by Administrator on 2018/3/13.
  */
 
 public abstract class SimpleCallback<T> extends JsonCallback<T> {
+
 
     @Override
     public void onSuccess(Response<T> response) {

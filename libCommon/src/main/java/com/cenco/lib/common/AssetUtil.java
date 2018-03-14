@@ -14,24 +14,22 @@ import java.io.InputStream;
 
 public class AssetUtil {
     private static String TAG = AssetUtil.class.getSimpleName();
-    public static boolean copyAssetsFilesToData(Context context,String outPath) {
+
+    public static boolean copyAssetsFilesToData(Context context, String outPath) {
         String inPath = "";
         long begin = System.currentTimeMillis();
         boolean ret = copyFiles(context, inPath, outPath);
         long end = System.currentTimeMillis();
-        Log.i(TAG, "copyAssetsFilesToData() elapsedTime:" + (end-begin));
+        Log.i(TAG, "copyAssetsFilesToData() elapsedTime:" + (end - begin));
         return ret;
     }
 
     /**
      * 从assets目录下拷贝整个文件夹，不管是文件夹还是文件都能拷贝
      *
-     * @param context
-     *            上下文
-     * @param inPath
-     *            文件目录，要拷贝的目录
-     * @param outPath
-     *            目标文件夹位置如：/sdcrad/mydir
+     * @param context 上下文
+     * @param inPath  文件目录，要拷贝的目录
+     * @param outPath 目标文件夹位置如：/sdcrad/mydir
      */
     public static boolean copyFiles(Context context, String inPath, String outPath) {
         Log.i(TAG, "copyFiles() inPath:" + inPath + ", outPath:" + outPath);
@@ -44,9 +42,9 @@ public class AssetUtil {
         }
         if (fileNames.length > 0) {//如果是目录
             File fileOutDir = new File(outPath);
-            if(fileOutDir.isFile()){
+            if (fileOutDir.isFile()) {
                 boolean ret = fileOutDir.delete();
-                if(!ret){
+                if (!ret) {
                     Log.e(TAG, "delete() FAIL:" + fileOutDir.getAbsolutePath());
                 }
             }
@@ -59,30 +57,30 @@ public class AssetUtil {
             for (String fileName : fileNames) { //递归调用复制文件夹
                 String inDir = inPath;
                 String outDir = outPath + File.separator;
-                if(!inPath.equals("")) { //空目录特殊处理下
+                if (!inPath.equals("")) { //空目录特殊处理下
                     inDir = inDir + File.separator;
                 }
-                copyFiles(context,inDir + fileName, outDir + fileName);
+                copyFiles(context, inDir + fileName, outDir + fileName);
             }
             return true;
         } else {//如果是文件
             try {
                 File fileOut = new File(outPath);
-                if(fileOut.exists()) {
+                if (fileOut.exists()) {
                     boolean ret = fileOut.delete();
-                    if(!ret){
+                    if (!ret) {
                         Log.e(TAG, "delete() FAIL:" + fileOut.getAbsolutePath());
                     }
                 }
                 boolean ret = fileOut.createNewFile();
-                if(!ret){
+                if (!ret) {
                     Log.e(TAG, "createNewFile() FAIL:" + fileOut.getAbsolutePath());
                 }
                 FileOutputStream fos = new FileOutputStream(fileOut);
                 InputStream is = context.getAssets().open(inPath);
                 byte[] buffer = new byte[1024];
-                int byteCount=0;
-                while((byteCount = is.read(buffer)) > 0) {
+                int byteCount = 0;
+                while ((byteCount = is.read(buffer)) > 0) {
                     fos.write(buffer, 0, byteCount);
                 }
                 fos.flush();//刷新缓冲区
@@ -95,4 +93,19 @@ public class AssetUtil {
             }
         }
     }
+
+
+    /**
+     * 获取assets中某文件的内容
+     * @param context
+     * @param path
+     * @return
+     * @throws IOException
+     */
+    public static String getAssetsFileText(Context context, String path) throws IOException {
+        InputStream is = context.getResources().getAssets().open(path);
+        String s = IOUtils.readStream2String(is);
+        return s;
+    }
+
 }

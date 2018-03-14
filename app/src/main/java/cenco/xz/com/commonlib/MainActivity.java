@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.cenco.lib.common.ToastUtil;
+import com.cenco.lib.common.activity.BaseActivity;
 import com.cenco.lib.common.http.HttpUtil;
 import com.cenco.lib.common.http.SimpleCallback;
+import com.cenco.lib.common.http.SimpleDialogCallback;
 import com.cenco.lib.common.log.LogUtils;
 import com.lzy.okgo.model.HttpParams;
 
@@ -16,7 +18,7 @@ import java.io.File;
 import cenco.xz.com.commonlib.bean.Result;
 import cenco.xz.com.commonlib.bean.User;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,15 +31,16 @@ public class MainActivity extends AppCompatActivity {
 
     public void getClick(View view) {
         String url ="http://172.26.96.1:3000/api/getUserName?id=1";
-        HttpUtil.get(url, new SimpleCallback<Result<User>>() {
+        HttpUtil.get(url, new SimpleDialogCallback<Result<User>>(this) {
             @Override
             public void onSuccess(Result<User> s) {
-                LogUtils.d(s.getData().toString());
+                LogUtils.d("api",s.getData().toString());
             }
 
             @Override
             public void onError(String reason) {
-                LogUtils.e(reason);
+                LogUtils.e("api",reason);
+                ToastUtil.show(mContext,reason);
             }
         });
     }
@@ -47,15 +50,16 @@ public class MainActivity extends AppCompatActivity {
         String url ="http://172.26.96.1:3000/api/setUserAddress";
         HttpParams params = new HttpParams();
         params.put("address","济南市");
-        HttpUtil.post(url, params, new SimpleCallback<Result<String>>() {
+        HttpUtil.post(url, params, new SimpleDialogCallback<Result<String>>(this) {
             @Override
             public void onSuccess(Result<String> s) {
-                LogUtils.d(s.toString());
+                LogUtils.d("api",s.toString());
             }
 
             @Override
             public void onError(String reason) {
-                LogUtils.e(reason);
+                LogUtils.e("api",reason);
+                ToastUtil.show(mContext,reason);
             }
         });
     }
@@ -70,16 +74,18 @@ public class MainActivity extends AppCompatActivity {
         }
         HttpParams params = new HttpParams();
         params.put("imageFile",file);
-        HttpUtil.post(url, params, new SimpleCallback<Result<String>>() {
+        HttpUtil.post(url, params, new SimpleDialogCallback<Result<String>>(this) {
             @Override
             public void onSuccess(Result<String> s) {
-                LogUtils.d(s.toString());
+                LogUtils.d("api",s.toString());
             }
 
             @Override
             public void onError(String reason) {
-                LogUtils.e(reason);
+                LogUtils.e("api",reason);
+                ToastUtil.show(mContext,reason);
             }
         });
     }
 }
+

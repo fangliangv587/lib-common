@@ -150,11 +150,15 @@ public class SystemUtil {
 	 * @param what
 	 * @param obj
 	 */
-	public static void sendMessage(Handler handler, int what, Object obj){
+	public static void sendMessage(Handler handler, int what, Object obj,int arg1){
 		Message message = Message.obtain();
 		message.what = what;
 		message.obj = obj;
+		message.arg1 = arg1;
 		handler.sendMessage(message);
+	}
+	public static void sendMessage(Handler handler, int what, Object obj){
+		sendMessage(handler,what,null,-1);
 	}
 	public static void sendMessage(Handler handler, int what){
 		sendMessage(handler,what,null);

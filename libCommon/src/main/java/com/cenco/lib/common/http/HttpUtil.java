@@ -5,14 +5,12 @@ import android.app.Application;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.cache.CacheMode;
-import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.cookie.CookieJarImpl;
 import com.lzy.okgo.cookie.store.MemoryCookieStore;
 import com.lzy.okgo.https.HttpsUtils;
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
 import com.lzy.okgo.model.HttpHeaders;
 import com.lzy.okgo.model.HttpParams;
-import com.lzy.okgo.model.Response;
 
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -25,19 +23,37 @@ import okhttp3.OkHttpClient;
 
 public class HttpUtil {
 
+    //初始化
     private static boolean isInit = false;
+    //接口mock
+    private static boolean ismock = false;
+
+
+    private static ApiMock mock;
 
     /**
      * 初始化
      * @param app
      */
-    public static void init(Application app) {
+    public static void init(Application app){
+        init(app,false,null);
+    }
+
+    /**
+     * 初始化
+     * @param app
+     * @param isMock 是否对接口进行mock
+     */
+    public static void init(Application app,boolean isMock,String path) {
 
         if (isInit){
             return;
         }
 
         isInit = true;
+        ismock = isMock;
+
+        mock = new ApiMock(path,app.getApplicationContext());
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
@@ -48,7 +64,7 @@ public class HttpUtil {
         loggingInterceptor.setColorLevel(Level.INFO);
         builder.addInterceptor(loggingInterceptor);
 
-        //全局的读取超时时间
+        //全局的读取超时时间，超过30s的最终会显示30s
         int seconds = 60;
         builder.readTimeout(seconds, TimeUnit.SECONDS);
         //全局的写入超时时间
@@ -99,11 +115,34 @@ public class HttpUtil {
     }
 
 
+    /**
+     * get回调请求
+     * @param url
+     * @param callback
+     * @param <T>
+     */
     public static<T> void get(String url,SimpleCallback<T> callback){
+        checkInit();
+        if (ismock){
+            mock.interruptWeb(url,callback);
+            return;
+        }
         OkGo.<T>get(url).execute(callback);
     }
 
+    /**
+     * post回调请求
+     * @param url
+     * @param params
+     * @param callback
+     * @param <T>
+     */
     public static<T> void post(String url,HttpParams params, SimpleCallback<T> callback){
+        checkInit();
+        if (ismock){
+            mock.interruptWeb(url,callback);
+            return;
+        }
         OkGo.<T>post(url).params(params).execute(callback);
     }
 
