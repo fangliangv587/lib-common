@@ -114,6 +114,24 @@ public class HttpUtil {
             throw new IllegalArgumentException("请在application中调用初始化方法");
     }
 
+    /**
+     * get回调请求
+     * @param url
+     * @param params
+     * @param callback
+     * @param <T>
+     */
+    public static<T> void get(String url,HttpParams params, SimpleCallback<T> callback){
+        if (url == null) return;
+        if (params !=null){
+            String param = params.toString();
+            if (!url.contains("?")){
+                url +="?";
+            }
+            url+=param;
+        }
+        get(url,callback);
+    }
 
     /**
      * get回调请求

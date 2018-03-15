@@ -1,14 +1,12 @@
 package cenco.xz.com.commonlib;
 
 import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
 import com.cenco.lib.common.ToastUtil;
 import com.cenco.lib.common.activity.BaseActivity;
 import com.cenco.lib.common.http.HttpUtil;
-import com.cenco.lib.common.http.SimpleCallback;
 import com.cenco.lib.common.http.SimpleDialogCallback;
 import com.cenco.lib.common.log.LogUtils;
 import com.lzy.okgo.model.HttpParams;
