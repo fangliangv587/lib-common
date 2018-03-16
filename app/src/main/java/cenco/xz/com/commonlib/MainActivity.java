@@ -4,6 +4,7 @@ import android.os.Environment;
 import android.os.Bundle;
 import android.view.View;
 
+import com.cenco.lib.common.AssetUtil;
 import com.cenco.lib.common.SPUtil;
 import com.cenco.lib.common.ToastUtil;
 import com.cenco.lib.common.activity.BaseActivity;
@@ -27,9 +28,6 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         LogUtils.d("xz","message log xz");
         LogUtils.i("helloworld");
-
-
-
 
     }
 

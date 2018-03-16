@@ -25,7 +25,7 @@ import okhttp3.ResponseBody;
 
 public class ApiMock<T> {
 
-    private String path;
+    private String folder;
     private Context context;
     private int number;
 
@@ -76,8 +76,8 @@ public class ApiMock<T> {
         }
     };
 
-    public ApiMock(String path, Context applicationContext) {
-        this.path = path;
+    public ApiMock(String folder, Context applicationContext) {
+        this.folder = folder;
         this.context = applicationContext;
     }
 
@@ -150,7 +150,11 @@ public class ApiMock<T> {
                 Thread.sleep(wait_time);
 
                 String urlPath = getUrlPath(url);
-                String text = AssetUtil.getAssetsFileText(context, path + File.separator + urlPath);
+                String filePath = folder + File.separator + urlPath;
+                if (!AssetUtil.isFileExists(context,filePath)){
+                    throw new IllegalArgumentException("the path is not exist:"+filePath);
+                }
+                String text = AssetUtil.getAssetsFileText(context, filePath);
                 Response rawResponse = getRawResponse(text);
                 T t = callback.convertResponse(rawResponse);
                 com.lzy.okgo.model.Response<T> response = com.lzy.okgo.model.Response.success(false,t,null,rawResponse);
