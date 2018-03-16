@@ -13,7 +13,7 @@ public class Result<T> {
      */
 
     private int code;
-    private String message;
+    private String msg;
     private T data;
 
     public int getCode() {
@@ -24,12 +24,12 @@ public class Result<T> {
         this.code = code;
     }
 
-    public String getMessage() {
-        return message;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
     public T getData() {
@@ -44,8 +44,8 @@ public class Result<T> {
     public String toString() {
         return "Result{" +
                 "code=" + code +
-                ", message='" + message + '\'' +
-                ", data=" + data.toString() +
+                ", msg='" + msg + '\'' +
+                ", data=" + data +
                 '}';
     }
 }

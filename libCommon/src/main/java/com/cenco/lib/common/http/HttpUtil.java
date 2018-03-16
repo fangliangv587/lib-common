@@ -28,15 +28,26 @@ public class HttpUtil {
     //接口mock
     private static boolean ismock = false;
 
+    private static String mockPath = "mock";
 
-    private static ApiMock mock;
+
+    private static ApiMock mockManger;
 
     /**
      * 初始化
      * @param app
      */
     public static void init(Application app){
-        init(app,false,null);
+        init(app,false);
+    }
+
+    /**
+     *
+     * @param app
+     * @param isMock if true, you should know the default mockManger path is {@link HttpUtil#mockPath},also you can call {@link HttpUtil#init(Application, boolean, String)}
+     */
+    public static void init(Application app,boolean isMock) {
+        init(app,isMock,mockPath);
     }
 
     /**
@@ -53,7 +64,7 @@ public class HttpUtil {
         isInit = true;
         ismock = isMock;
 
-        mock = new ApiMock(path,app.getApplicationContext());
+        mockManger = new ApiMock(path,app.getApplicationContext());
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
@@ -142,7 +153,7 @@ public class HttpUtil {
     public static<T> void get(String url,SimpleCallback<T> callback){
         checkInit();
         if (ismock){
-            mock.interruptWeb(url,callback);
+            mockManger.interruptWeb(url,callback);
             return;
         }
         OkGo.<T>get(url).execute(callback);
@@ -158,7 +169,7 @@ public class HttpUtil {
     public static<T> void post(String url,HttpParams params, SimpleCallback<T> callback){
         checkInit();
         if (ismock){
-            mock.interruptWeb(url,callback);
+            mockManger.interruptWeb(url,callback);
             return;
         }
         OkGo.<T>post(url).params(params).execute(callback);

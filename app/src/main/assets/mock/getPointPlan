@@ -1,0 +1,10 @@
+{
+	"msg": "请求成功",
+	"code": 200,
+	"data": [{
+		"ad_plan_id": "xxxx",
+		"name": "yyyyy",
+		"material": "zzz",
+		"images": ["a", "b", "c"]
+	}]
+}

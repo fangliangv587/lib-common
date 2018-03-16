@@ -12,8 +12,10 @@ import com.cenco.lib.common.log.LogUtils;
 import com.lzy.okgo.model.HttpParams;
 
 import java.io.File;
+import java.util.List;
 
 import cenco.xz.com.commonlib.bean.Result;
+import cenco.xz.com.commonlib.bean.Task;
 import cenco.xz.com.commonlib.bean.User;
 
 public class MainActivity extends BaseActivity {
@@ -84,6 +86,31 @@ public class MainActivity extends BaseActivity {
                 ToastUtil.show(mContext,reason);
             }
         });
+    }
+
+    public void taskListClick(View view) {
+
+        String url ="http://172.26.96.1:3000/api/getTaskList";
+        HttpParams params = new HttpParams();
+        params.put("address","济南市");
+        HttpUtil.post(url, params, new SimpleDialogCallback<Result<List<Task>>>(this) {
+            @Override
+            public void onSuccess(Result<List<Task>> s) {
+                LogUtils.d("api",s.toString());
+            }
+
+            @Override
+            public void onError(String reason) {
+                LogUtils.e("api",reason);
+                ToastUtil.show(mContext,reason);
+            }
+        });
+    }
+
+    public void taskDetailClick(View view) {
+    }
+
+    public void taskPointPlanClick(View view) {
     }
 }
 

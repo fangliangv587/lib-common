@@ -1,0 +1,12 @@
+{
+ 	"msg": "请求成功",
+ 	"code": 200,
+ 	"data": {
+ 		"user_id": "xxxx",
+ 		"username": "AAAA",
+ 		"realname": "测试",
+ 		"phone": "15588591960",
+ 		"job": "工程师",
+ 		"company": "快发"
+ 	}
+ }

@@ -20,4 +20,18 @@
        android:text="post文件上传"
        android:onClick="postFileClick"/>
 
+   <Button
+       style="@style/FullViewStyle"
+       android:text="任务列表"
+       android:onClick="taskListClick"/>
+   <Button
+       style="@style/FullViewStyle"
+       android:text="任务详情"
+       android:onClick="taskDetailClick"/>
+
+   <Button
+       style="@style/FullViewStyle"
+       android:text="任务点位方案"
+       android:onClick="taskPointPlanClick"/>
+
 </LinearLayout>

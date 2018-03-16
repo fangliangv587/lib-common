@@ -1,0 +1,44 @@
+{
+	"msg": "请求成功",
+	"code": 200,
+	"data": {
+		"task_id": "xxxx",
+		"building_id": "yyyyy",
+		"type": "上刊",
+		"distribute_date": "2018/01/06",
+		"execute_date": "2018/02/06",
+		"media_type": "屏",
+		"users": "xxxx,yyyyy,zzzz",
+		"state": 1,
+		"comment": "带报头/点位照片",
+		"point_count": 5,
+		"finish_count": 0,
+		"user": [{
+			"user_id": "xxxx",
+			"realname": "张三",
+			"phone": "15588591966"
+		}, {
+			"user_id": "xxxx",
+			"realname": "张三",
+			"phone": "15588591966"
+		}, {
+			"user_id": "xxxx",
+			"realname": "张三",
+			"phone": "15588591966"
+		}],
+		"point_task": [{
+			"point_task_item_id": "xxx",
+			"point_screen_id": "yyyy",
+			"point_screen_name": "zzz",
+			"user_id": "aaaa",
+			"state": 1
+		}, {
+			"point_task_item_id": "xxx",
+			"point_screen_id": "yyyy",
+			"point_screen_name": "zzz",
+			"user_id": "aaaa",
+			"state": 1
+		}]
+
+	}
+}
