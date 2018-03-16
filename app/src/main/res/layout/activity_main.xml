@@ -7,6 +7,11 @@
     android:layout_height="match_parent"
     tools:context="cenco.xz.com.commonlib.MainActivity">
 
+   <TextView
+       style="@style/normalViewStyle"
+       android:text="测试结果见log打印"
+       />
+
    <Button
        style="@style/FullViewStyle"
        android:text="get请求"
@@ -26,8 +31,8 @@
        android:onClick="taskListClick"/>
    <Button
        style="@style/FullViewStyle"
-       android:text="任务详情"
-       android:onClick="taskDetailClick"/>
+       android:text="获取sp数据（请先点击任务列表按钮）"
+       android:onClick="spClick"/>
 
    <Button
        style="@style/FullViewStyle"

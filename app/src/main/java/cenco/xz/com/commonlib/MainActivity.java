@@ -4,6 +4,7 @@ import android.os.Environment;
 import android.os.Bundle;
 import android.view.View;
 
+import com.cenco.lib.common.SPUtil;
 import com.cenco.lib.common.ToastUtil;
 import com.cenco.lib.common.activity.BaseActivity;
 import com.cenco.lib.common.http.HttpUtil;
@@ -27,7 +28,11 @@ public class MainActivity extends BaseActivity {
         LogUtils.d("xz","message log xz");
         LogUtils.i("helloworld");
 
+
+
+
     }
+
 
     public void getClick(View view) {
         String url ="http://172.26.96.1:3000/api/getUserName?id=1";
@@ -97,6 +102,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onSuccess(Result<List<Task>> s) {
                 LogUtils.d("api",s.toString());
+                SPUtil.put(mContext,"task",s);
             }
 
             @Override
@@ -111,6 +117,10 @@ public class MainActivity extends BaseActivity {
     }
 
     public void taskPointPlanClick(View view) {
+    }
+
+    public void spClick(View view) {
+
     }
 }
 
