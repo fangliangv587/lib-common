@@ -1,5 +1,6 @@
 package com.cenco.lib.common;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -66,6 +67,18 @@ public class DateUtil {
 
 	public static String getDateString() {
 		return getDateString(FORMAT_YMDHMS);
+	}
+
+	public static Date getDate(String str,String format){
+		try {
+			SimpleDateFormat sdf=new SimpleDateFormat(format);
+			Date date = sdf.parse(str);
+			return date;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			LogUtils.d("lib",e.getMessage());
+		}
+		return null;
 	}
 	
 	/**

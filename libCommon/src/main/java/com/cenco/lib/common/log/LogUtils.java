@@ -21,6 +21,8 @@ public class LogUtils {
     private  static  String commontag = "libCommon";
     private static boolean isInit = false;
     public static boolean debug = true;
+    /*是否全局保存*/
+    public static boolean save = false;
 
     public static void init(String tag,boolean isFormat, String logPath){
         if (isInit){
@@ -143,16 +145,16 @@ public class LogUtils {
 
 
     public static void d(String tag,String mes){
-        d(tag,mes,true);
+        d(tag,mes,save);
     }
     public static void i(String tag,String mes){
-        i(tag,mes,true);
+        i(tag,mes,save);
     }
     public static void w(String tag,String mes){
-        w(tag,mes,true);
+        w(tag,mes,save);
     }
     public static void e(String tag,String mes){
-        e(tag,mes,true);
+        e(tag,mes,save);
     }
 
     public static void d(String mes){
