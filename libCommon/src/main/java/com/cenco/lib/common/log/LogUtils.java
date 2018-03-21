@@ -101,7 +101,7 @@ public class LogUtils {
         }
         if (!save){
             String tag1 = formatTag(tag);
-            Log.d(tag1,mes);
+            Log.i(tag1,mes);
             return;
         }
 
@@ -117,7 +117,7 @@ public class LogUtils {
 
         if (!save){
             String tag1 = formatTag(tag);
-            Log.d(tag1,mes);
+            Log.w(tag1,mes);
             return;
         }
 
@@ -133,7 +133,7 @@ public class LogUtils {
 
         if (!save){
             String tag1 = formatTag(tag);
-            Log.d(tag1,mes);
+            Log.e(tag1,mes);
             return;
         }
 

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.cenco.lib.common.AssetUtil;
+import com.cenco.lib.common.DateUtil;
 import com.cenco.lib.common.SPUtil;
 import com.cenco.lib.common.ToastUtil;
 import com.cenco.lib.common.activity.BaseActivity;
@@ -14,6 +15,7 @@ import com.cenco.lib.common.log.LogUtils;
 import com.lzy.okgo.model.HttpParams;
 
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 
 import cenco.xz.com.commonlib.bean.Result;
@@ -28,6 +30,12 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         LogUtils.d("xz","message log xz");
         LogUtils.i("helloworld");
+
+        Date dest = DateUtil.createDate(1989, 4, 15, 10, 18, 19);
+        Date start = DateUtil.createDate(1900, 4, 15, 8, 18, 19);
+        Date stop = DateUtil.createDate(2000, 4, 15, 16, 18, 19);
+
+        DateUtil.isInPeriodDate(dest,start,stop,DateUtil.FORMAT_HM);
 
     }
 

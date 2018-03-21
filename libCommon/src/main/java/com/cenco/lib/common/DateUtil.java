@@ -49,6 +49,12 @@ public class DateUtil {
 	}
 
 
+	public static Date getFormatDate(Date date, String format){
+        String dateString = getDateString(date, format);
+        Date date1 = getDate(dateString, format);
+        return date1;
+    }
+
 	/**
 	 * date 转 string
 	 * @param date
@@ -56,6 +62,9 @@ public class DateUtil {
 	 * @return
 	 */
 	public static String getDateString(Date date, String format) {
+	    if (date == null || format == null){
+	        return null;
+        }
 		SimpleDateFormat formatter = new SimpleDateFormat(format);
 		String dateString = formatter.format(date);
 		return dateString;
@@ -70,6 +79,9 @@ public class DateUtil {
 	}
 
 	public static Date getDate(String str,String format){
+	    if (str == null || format == null){
+	        return null;
+        }
 		try {
 			SimpleDateFormat sdf=new SimpleDateFormat(format);
 			Date date = sdf.parse(str);
@@ -95,6 +107,41 @@ public class DateUtil {
         }
         return value;
 	}
+
+	public static Date createDate(int year,int month,int day,int hour,int minute,int second){
+	    if (year>10000 || year < 0){
+	        return null;
+        }
+        if (month<=0 || month>12){
+	        return null;
+        }
+        //未完善
+        if (day>31 || day<= 0){
+            return null;
+        }
+
+        if (hour<0 || hour>23){
+            return null;
+        }
+
+        if (minute<0 || minute>59){
+            return null;
+        }
+        if (second<0 || second>59){
+            return null;
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year,month-1,day,hour,minute,second);
+        return calendar.getTime();
+    }
+
+    public static Date createYMDDate(int year,int month,int day){
+	    return createDate(year, month, day,0,0,0);
+    }
+    public static Date createHMSDate(int hour,int minute,int second){
+	    return createDate(0, 0, 0,hour,minute,second);
+    }
 
 	public static int getYear(Date date){
 		return getDateColumeValue(date,Calendar.YEAR);
@@ -157,22 +204,28 @@ public class DateUtil {
 	 * @return
 	 */
 	public static boolean isInPeriodDate(Date destDate,Date startDate,Date stopDate,String format){
-		
-		String dest = getDateString(destDate, format);
-		String start = getDateString(startDate, format);
-		String stop = getDateString(stopDate, format);
 
-        LogUtils.i("isInPeriodDate destDate= "+ dest+",start="+start+",stop="+stop);
+        destDate = getFormatDate(destDate,format);
+        startDate = getFormatDate(startDate,format);
+        stopDate = getFormatDate(stopDate,format);
 
+        //**** start:just for print ****/
+        String dest = getDateString(destDate, format);
+        String start = getDateString(startDate, format);
+        String stop = getDateString(stopDate, format);
+
+        //**** stop:just for print ****/
+
+        boolean result = false;
 		if (destDate.equals(startDate) || destDate.equals(stopDate)) {
-			return true;
+            result = true;
 		}
 		
 		if (destDate.after(startDate) && destDate.before(stopDate)) {
-			return true;
+            result = true;
 		}
-		
-		return false;
+        LogUtils.i("lib-date","isInPeriodDate destDate【"+ dest+"】,start【"+start+"】,stop【"+stop+"】 ----->"+result);
+		return result;
 	}
     public static boolean isInPeriodDate(Date destDate,Date startDate,Date stopDate){
 	    return isInPeriodDate(destDate,startDate,stopDate,FORMAT_YMDHMS);
