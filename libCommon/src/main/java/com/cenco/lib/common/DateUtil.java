@@ -80,7 +80,43 @@ public class DateUtil {
 		}
 		return null;
 	}
-	
+
+
+
+	public static int getDateColumeValue(Date date,int colume){
+		if (date==null){
+			return 0;
+		}
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+        int value = cal.get(colume);
+        if (colume == Calendar.MONTH){
+            value += 1;
+        }
+        return value;
+	}
+
+	public static int getYear(Date date){
+		return getDateColumeValue(date,Calendar.YEAR);
+	}
+	public static int getMonth(Date date){
+        return getDateColumeValue(date,Calendar.MONTH);
+	}
+	public static int getDay(Date date){
+        return getDateColumeValue(date,Calendar.DATE);
+    }
+
+	public static int getHour(Date date){
+        return getDateColumeValue(date,Calendar.HOUR_OF_DAY);
+    }
+    public static int getMinute(Date date){
+        return getDateColumeValue(date,Calendar.MINUTE);
+    }
+
+    public static int getSecond(Date date){
+        return getDateColumeValue(date,Calendar.SECOND);
+    }
+
 	/**
 	 * 获取周几
 	 * @param date
