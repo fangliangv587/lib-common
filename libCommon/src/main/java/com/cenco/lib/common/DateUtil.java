@@ -150,20 +150,19 @@ public class DateUtil {
 	
 	/**
 	 * 目标日期是否在指定日期区间内(闭合区间) 
-	 * @param destDate
-	 * @param startDate
-	 * @param stopDate
+	 * @param destDate 目标日期
+	 * @param startDate  起始日期
+	 * @param stopDate  终止日期
+     * @param format 格式
 	 * @return
 	 */
-	public static boolean isInPeriodDate(Date destDate,Date startDate,Date stopDate){
+	public static boolean isInPeriodDate(Date destDate,Date startDate,Date stopDate,String format){
 		
-		String dest = getDateString(destDate, FORMAT_YMDHMS);
-		String start = getDateString(startDate, FORMAT_YMDHMS);
-		String stop = getDateString(stopDate, FORMAT_YMDHMS);
+		String dest = getDateString(destDate, format);
+		String start = getDateString(startDate, format);
+		String stop = getDateString(stopDate, format);
 
-            System.out.print("isInPeriodDate destDate= "+ dest+",start="+start+",stop="+stop);
-            LogUtils.i("isInPeriodDate destDate= "+ dest+",start="+start+",stop="+stop);
-
+        LogUtils.i("isInPeriodDate destDate= "+ dest+",start="+start+",stop="+stop);
 
 		if (destDate.equals(startDate) || destDate.equals(stopDate)) {
 			return true;
@@ -175,6 +174,9 @@ public class DateUtil {
 		
 		return false;
 	}
+    public static boolean isInPeriodDate(Date destDate,Date startDate,Date stopDate){
+	    return isInPeriodDate(destDate,startDate,stopDate,FORMAT_YMDHMS);
+    }
 
     /**
      * 用于将日期转换成Calendar实例
