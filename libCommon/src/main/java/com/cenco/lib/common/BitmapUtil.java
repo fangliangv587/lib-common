@@ -4,9 +4,12 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.YuvImage;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -24,6 +27,154 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class BitmapUtil {
+
+    public static Bitmap getWatermarkBitmap(Context context,Bitmap bitmap,String mark){
+        return getWatermarkBitmap(context,bitmap,mark,null);
+    }
+
+    public static Bitmap getWatermarkBitmap(Context context,Bitmap bitmap,String mark,String fontAssetPath){
+        return getWatermarkBitmap(context,bitmap,mark,fontAssetPath,null);
+    }
+
+    /**
+     * 注意：加载字体极为耗时
+     * @param context
+     * @param bitmap
+     * @param mark
+     * @param fontAssetPath
+     * @param infos
+     * @return
+     */
+    public static Bitmap getWatermarkBitmap(Context context,Bitmap bitmap,String mark,String fontAssetPath,String... infos){
+        if (fontAssetPath==null){
+            fontAssetPath = "fonts/akong.ttf";
+        }
+        Typeface typeface = null;
+        if (AssetUtil.isFileExists(context,fontAssetPath)){
+            typeface = Typeface.createFromAsset(context.getAssets(), fontAssetPath);
+        }
+        return getWatermarkBitmap(bitmap,mark,typeface,infos);
+    }
+    /**
+     * 图片打水印 并将信息内容合成到图片中
+     * @param bitmap
+     * @param mark 水印
+     * @param typeface 字体
+     * @param infos 信息内容
+     * example:Bitmap bitmap1 = getWatermarkBitmap( bitmap, "快发网络","时间", "地点","执行人","媒体位置","订单号","方案名称");
+     * @return
+     */
+    public static Bitmap getWatermarkBitmap(Bitmap bitmap,String mark,Typeface typeface,String... infos){
+        Bitmap newBmp = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas(newBmp);
+        canvas.drawBitmap(bitmap, 0, 0, null);  //绘制原始图片
+        canvas.save();
+
+        canvas.rotate(-45);
+        int textColor = Color.DKGRAY;
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setColor(textColor); //白色半透明
+        paint.setTextSize(80 );
+        paint.setDither(true);
+        paint.setFilterBitmap(true);
+        paint.setTypeface(typeface);
+
+        //计算文字宽高
+        Rect rect = new Rect();
+        paint.getTextBounds(mark, 0, mark.length(), rect);
+        int textWidth = rect.width();
+        int textHeight = rect.height();
+
+        //旋转角度比例
+        float ratio = 1.414f;
+
+
+        /**
+         * 计算起点位置
+         * 超过有效长度则默认从有效起点开始，否则居中
+         */
+        int middleLine1 = (int) (bitmap.getWidth()*1f/ratio);
+        int y1 = middleLine1+textHeight/2;
+        int totalWidth = (int) (bitmap.getWidth()*ratio);
+        int validWidth = totalWidth - textHeight;
+        int x1 = 0;
+        if (textWidth>validWidth){
+            x1 = -validWidth/2;
+        }else {
+            x1 = -textWidth/2;
+        }
+        canvas.drawText(mark, x1, y1, paint);
+
+        //第二个文字
+        int middleLine2 = (int) (bitmap.getHeight()*1f/ratio);
+        int y2 = middleLine2+textHeight/2;
+        int x2 =0;
+        int dis = totalWidth>middleLine2 ? totalWidth-middleLine2 : 0;
+        if (textWidth>validWidth){
+            x2 = -(totalWidth-dis-textHeight/2);
+        }else {
+            x2 = -(totalWidth-dis-(totalWidth/2-textWidth/2));
+        }
+        canvas.drawText(mark, x2, y2, paint);
+
+        canvas.restore();
+
+        Bitmap infoBitmap = getInfoBitmap(bitmap.getWidth(), bitmap.getHeight(), infos);
+        if (infoBitmap == null){
+            return newBmp;
+        }
+
+        int infoHeight = infoBitmap.getHeight();
+        int top = bitmap.getHeight() - infoHeight;
+        canvas.drawBitmap(infoBitmap,0,top,null);
+        infoBitmap.recycle();
+        return newBmp;
+    }
+
+
+    /**
+     * 合成信息bitmap
+     * @param width
+     * @param height
+     * @param infos
+     * @return
+     */
+    public static Bitmap getInfoBitmap(int width,int height,String... infos){
+        if (infos == null ){
+            return null;
+        }
+        if (width<=0 || height<=0){
+            return null;
+        }
+
+        int itemHeight = 40;
+        int bottomPadding = 20;
+        int textSize = itemHeight -10;//50
+        int validHeight = infos.length * itemHeight + bottomPadding;
+        if (validHeight>height){
+            validHeight = height;
+        }
+
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setColor(Color.WHITE);
+        paint.setTextSize(textSize);
+        paint.setDither(true);
+
+        Bitmap newBmp = Bitmap.createBitmap(width, validHeight, Bitmap.Config.ARGB_4444);
+        Canvas canvas = new Canvas(newBmp);
+        canvas.drawColor(Color.argb(180,0,0,0));//color:dark gray
+
+        for (int i = 0; i<infos.length; i++){
+            String info = infos[i];
+            int x = 20;//文字的左边距
+            int y = itemHeight*(i+1);
+            canvas.drawText(info, x, y, paint);
+        }
+
+
+        return newBmp;
+    }
+
 
 
     /**

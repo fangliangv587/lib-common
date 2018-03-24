@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
@@ -25,10 +27,56 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.util.List;
 
 public class SystemUtil {
 
+
+	/**
+	 * 获取mac
+	 * @param context
+	 * @return
+	 */
+	public static String getMac(Context context){
+		WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+		WifiInfo info = wifi.getConnectionInfo();
+		String str = info.getMacAddress();
+
+		String fixMac = "02:00:00:00:00:00";
+		if (str == null || fixMac.equals(str)){
+			str = getExeMac();
+		}
+		return  str;
+	}
+
+	/**
+	 * 这是使用adb shell命令来获取mac地址的方式
+	 * @return
+	 */
+	private static String getExeMac() {
+		String macSerial = null;
+		String str = "";
+
+		try {
+			Process pp = Runtime.getRuntime().exec("cat /sys/class/net/wlan0/address ");
+			InputStreamReader ir = new InputStreamReader(pp.getInputStream());
+			LineNumberReader input = new LineNumberReader(ir);
+
+			for (; null != str; ) {
+				str = input.readLine();
+				if (str != null) {
+					macSerial = str.trim();// 去空格
+					break;
+				}
+			}
+		} catch (IOException ex) {
+			// 赋予默认值
+			ex.printStackTrace();
+		}
+		return macSerial;
+	}
 	/**
 	 * 获取本地软件版本号
 	 */

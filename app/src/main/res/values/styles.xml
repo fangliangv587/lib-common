@@ -13,6 +13,7 @@
         <item name="android:layout_marginLeft">10dp</item>
 
     </style>
+
     <style name="normalViewStyle"  parent="marginViewStyle">
 
         <item name="android:textSize">18sp</item>
