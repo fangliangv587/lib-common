@@ -33,7 +33,8 @@ public class BitmapUtil {
     }
 
     public static Bitmap getWatermarkBitmap(Context context,Bitmap bitmap,String mark,String fontAssetPath){
-        return getWatermarkBitmap(context,bitmap,mark,fontAssetPath,null);
+        String info = null;
+        return getWatermarkBitmap(context,bitmap,mark,fontAssetPath,info);
     }
 
     /**
@@ -71,7 +72,7 @@ public class BitmapUtil {
         canvas.save();
 
         canvas.rotate(-45);
-        int textColor = Color.DKGRAY;
+        int textColor = Color.BLACK;
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(textColor); //白色半透明
         paint.setTextSize(80 );
@@ -95,13 +96,24 @@ public class BitmapUtil {
          */
         int middleLine1 = (int) (bitmap.getWidth()*1f/ratio);
         int y1 = middleLine1+textHeight/2;
-        int totalWidth = (int) (bitmap.getWidth()*ratio);
-        int validWidth = totalWidth - textHeight;
         int x1 = 0;
-        if (textWidth>validWidth){
-            x1 = -validWidth/2;
+
+        if (bitmap.getHeight()>bitmap.getWidth()){
+            int totalWidth = (int) (bitmap.getWidth()*ratio);
+            int validWidth = totalWidth - textHeight;
+            if (textWidth>validWidth){
+                x1 = -validWidth/2;
+            }else {
+                x1 = -textWidth/2;
+            }
         }else {
-            x1 = -textWidth/2;
+            int totalWidth = (int) (bitmap.getHeight()*ratio);
+            int validWidth = totalWidth - textHeight;
+            if (textWidth>validWidth){
+                x1 = (int) ((bitmap.getWidth()-2*bitmap.getHeight())/ratio+textHeight/2);
+            }else {
+                x1 = (int) ((bitmap.getWidth()-2*bitmap.getHeight())/ratio + (bitmap.getHeight()*ratio-textWidth)/2);
+            }
         }
         canvas.drawText(mark, x1, y1, paint);
 
@@ -109,11 +121,24 @@ public class BitmapUtil {
         int middleLine2 = (int) (bitmap.getHeight()*1f/ratio);
         int y2 = middleLine2+textHeight/2;
         int x2 =0;
-        int dis = totalWidth>middleLine2 ? totalWidth-middleLine2 : 0;
-        if (textWidth>validWidth){
-            x2 = -(totalWidth-dis-textHeight/2);
+
+        if (bitmap.getHeight()>bitmap.getWidth()){
+            int totalWidth = (int) (bitmap.getWidth()*ratio);
+            int validWidth = totalWidth - textHeight;
+            int dis = totalWidth>middleLine2 ? totalWidth-middleLine2 : 0;
+            if (textWidth>validWidth){
+                x2 = -(totalWidth-dis-textHeight/2);
+            }else {
+                x2 = -(totalWidth-dis-(totalWidth/2-textWidth/2));
+            }
         }else {
-            x2 = -(totalWidth-dis-(totalWidth/2-textWidth/2));
+            int totalWidth = (int) (bitmap.getHeight() * ratio);
+            int validWidth = totalWidth - textHeight;
+            if (textWidth > validWidth) {
+                x2 = -validWidth / 2;
+            } else {
+                x2 = -textWidth / 2;
+            }
         }
         canvas.drawText(mark, x2, y2, paint);
 
