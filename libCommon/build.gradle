@@ -42,5 +42,7 @@ dependencies {
     compile 'com.lzy.net:okgo:3.0.4'//网络请求库
     implementation 'com.lzy.net:okrx2:2.0.2'//rxjava2依赖
     implementation 'com.lzy.net:okserver:2.0.5'//上传下载库
+    implementation 'com.yanzhenjie:permission:2.0.0-rc3' //权限控制
+    implementation 'com.yanzhenjie.alertdialog:alertdialog:1.0.1'//权限控制依赖的dialog
 
 }

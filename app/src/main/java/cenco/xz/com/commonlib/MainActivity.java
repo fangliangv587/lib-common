@@ -2,6 +2,7 @@ package cenco.xz.com.commonlib;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import com.cenco.lib.common.AssetUtil;
 import com.cenco.lib.common.BitmapUtil;
 import com.cenco.lib.common.DateUtil;
+import com.cenco.lib.common.PermissionManager;
 import com.cenco.lib.common.SPUtil;
 import com.cenco.lib.common.ToastUtil;
 import com.cenco.lib.common.activity.BaseActivity;
@@ -39,6 +41,8 @@ public class MainActivity extends BaseActivity {
     private ImageView watermarkImageView;
     private ImageView infoImageView;
 
+    private static  final int REQUESTCODE = 0x0011;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,16 +57,33 @@ public class MainActivity extends BaseActivity {
     }
 
     private void permission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    0);
-        }
+        PermissionManager pm = new PermissionManager(this,REQUESTCODE);
+        pm.requestPermission(new PermissionManager.PermissionCallback() {
+            @Override
+            public void onGrant() {
+                ToastUtil.show(mContext,"权限已获取");
+            }
+
+            @Override
+            public void onDeny() {
+                ToastUtil.show(mContext,"权限已被您拒绝");
+            }
+        },Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 
     private void initView() {
         watermarkImageView = findViewById(R.id.watermarkImageView);
         infoImageView = findViewById(R.id.infoImageView);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        LogUtils.d("onActivityResult");
+        if (requestCode == REQUESTCODE){
+            LogUtils.d("requestCode == REQUESTCODE");
+            permission();
+        }
     }
 
     /**************************************打水印***************************************************/
