@@ -94,6 +94,7 @@ public class LogUtils {
             Logger.t(tag);
         }
         Logger.d(mes);
+
     }
     public static void i(String tag,String mes,boolean save){
         if (!printLog()){

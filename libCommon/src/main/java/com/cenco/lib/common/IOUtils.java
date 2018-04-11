@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
+import java.io.Reader;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
@@ -528,6 +529,28 @@ public class IOUtils {
             StringBuilder sb = new StringBuilder();
 
             reader = new BufferedReader(new InputStreamReader(inputStream));
+
+            String line;
+            if ((line = reader.readLine()) != null) {
+                sb.append(line);
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
+            }
+            return sb.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            closeIO(reader);
+        }
+    }
+    public static String readStream2String(Reader in){
+        BufferedReader reader = null;
+        try {
+            StringBuilder sb = new StringBuilder();
+
+            reader = new BufferedReader(in);
 
             String line;
             if ((line = reader.readLine()) != null) {

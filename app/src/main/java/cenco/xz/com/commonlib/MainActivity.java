@@ -1,8 +1,10 @@
 package cenco.xz.com.commonlib;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -23,11 +25,17 @@ import com.cenco.lib.common.FileUtils;
 import com.cenco.lib.common.PermissionManager;
 import com.cenco.lib.common.SPUtil;
 import com.cenco.lib.common.ToastUtil;
+import com.cenco.lib.common.UpdateHelper;
 import com.cenco.lib.common.activity.BaseActivity;
 import com.cenco.lib.common.http.HttpUtil;
 import com.cenco.lib.common.http.SimpleDialogCallback;
+import com.cenco.lib.common.json.GsonUtil;
 import com.cenco.lib.common.log.LogUtils;
+import com.lzy.okgo.model.HttpHeaders;
 import com.lzy.okgo.model.HttpParams;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.Date;
@@ -44,6 +52,9 @@ public class MainActivity extends BaseActivity {
 
     private static  final int REQUESTCODE = 0x0011;
 
+
+    private String token;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,8 +65,9 @@ public class MainActivity extends BaseActivity {
 
         permission();
 
-
     }
+
+
 
     private void permission() {
         PermissionManager pm = new PermissionManager(this,REQUESTCODE);
@@ -87,6 +99,54 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    /**************************************媒体助手***************************************************/
+    public void taskListClickRecieved(View view) {
+        String url ="http://devapi.kuaifa.tv/mediaAide/v1/task/getTaskListIng";
+        HttpUtil.get(url, new SimpleDialogCallback<String>(this) {
+            @Override
+            public void onSuccess(String s) {
+                LogUtils.d("api",s.toString());
+            }
+
+            @Override
+            public void onError(String reason) {
+                LogUtils.e("api",reason);
+            }
+        });
+    }
+    public void loginClick(View view) {
+        String url ="http://devapi.kuaifa.tv/mediaAide/v1/login/login";
+        HttpParams params = new HttpParams();
+        params.put("username","媒体上刊员工001");
+        params.put("password","123456");
+        HttpUtil.post(url, params, new SimpleDialogCallback<String>(this) {
+            @Override
+            public void onSuccess(String s) {
+                LogUtils.d("api",s.toString());
+                try {
+                    JSONObject jo= new JSONObject(s);
+                    token = jo.getJSONObject("data").getString("token");
+                    HttpUtil.addCommonHeaders(new HttpHeaders("Authorization",token));
+                    LogUtils.i("api",token);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(String reason) {
+                LogUtils.e("api",reason);
+                ToastUtil.show(mContext,reason);
+            }
+        });
+    }
+
+    /**************************************升级***************************************************/
+    public void updateClick(View view) {
+        String checkUrl = "http://kuaifa.tv/updateversion/abt_version.json";
+        UpdateHelper helper = new UpdateHelper(checkUrl);
+        helper.checkVersion();
+    }
     /**************************************打水印***************************************************/
 
     public void watermarkClick(View view) {
@@ -124,7 +184,7 @@ public class MainActivity extends BaseActivity {
     /**************************************网络请求部分***************************************************/
 
     public void getClick(View view) {
-        String url ="http://172.26.96.1:3000/api/getUserName?id=1";
+        String url ="http://192.168.3.13:3000/api/getUserName?id=1";
         HttpUtil.get(url, new SimpleDialogCallback<Result<User>>(this) {
             @Override
             public void onSuccess(Result<User> s) {
@@ -141,7 +201,7 @@ public class MainActivity extends BaseActivity {
 
     public void postClick(View view) {
 
-        String url ="http://172.26.96.1:3000/api/setUserAddress";
+        String url ="http://192.168.3.13:3000/api/setUserAddress";
         HttpParams params = new HttpParams();
         params.put("address","济南市");
         HttpUtil.post(url, params, new SimpleDialogCallback<Result<String>>(this) {
@@ -159,7 +219,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public void postFileClick(View view) {
-        String url ="http://172.26.96.1:3000/api/upload";
+        String url ="http://192.168.3.13:3000/api/upload";
         String path  = Environment.getExternalStorageDirectory().getAbsolutePath()+ File.separator+"xz"+File.separator+"xz.jpg";
         File file = new File(path);
         if (!file.exists()){
@@ -184,7 +244,7 @@ public class MainActivity extends BaseActivity {
 
     public void taskListClick(View view) {
 
-        String url ="http://172.26.96.1:3000/api/getTaskList";
+        String url ="http://192.168.3.13:3000/api/getTaskList";
         HttpParams params = new HttpParams();
         params.put("address","济南市");
         HttpUtil.post(url, params, new SimpleDialogCallback<Result<List<Task>>>(this) {
@@ -192,6 +252,24 @@ public class MainActivity extends BaseActivity {
             public void onSuccess(Result<List<Task>> s) {
                 LogUtils.d("api",s.toString());
                 SPUtil.put(mContext,"task",s);
+            }
+
+            @Override
+            public void onError(String reason) {
+                LogUtils.e("api",reason);
+                ToastUtil.show(mContext,reason);
+            }
+        });
+    }
+
+
+    public void jsonClick(View view) {
+        String url ="http://192.168.3.13:3000/api/getTaskList";
+        String str = "";
+        HttpUtil.postJson(url, str, new SimpleDialogCallback<String>(this) {
+            @Override
+            public void onSuccess(String s) {
+                LogUtils.d("api",s.toString());
             }
 
             @Override

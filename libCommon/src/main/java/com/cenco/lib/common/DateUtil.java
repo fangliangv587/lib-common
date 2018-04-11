@@ -18,7 +18,8 @@ public class DateUtil {
 	public static final String FORMAT_HMS = "HH:mm:ss";
 	public static final String FORMAT_HM = "HH:mm";
 	public static final String FORMAT_M = "mm";
-	
+	public static final String FORMAT_S = "ss";
+
 	public static final  String[] WEEKDAYS1 = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
 	public static final  String[] WEEKDAYS2 = {"周日", "周一", "周二", "周三", "周四", "周五", "周六"};
 

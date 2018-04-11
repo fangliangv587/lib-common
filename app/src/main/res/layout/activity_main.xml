@@ -17,6 +17,45 @@
             android:orientation="vertical">
 
 
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:background="#123456"
+                android:orientation="vertical">
+
+
+
+                <Button
+                    style="@style/FullViewStyle"
+                    android:onClick="loginClick"
+                    android:text="登录" />
+                <Button
+                    style="@style/FullViewStyle"
+                    android:onClick="taskListClickRecieved"
+                    android:text="任务列表（已接收）" />
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:background="#00FF00"
+                android:orientation="vertical">
+
+                <Button
+                    style="@style/FullViewStyle"
+                    android:onClick="updateClick"
+                    android:text="升级" />
+
+
+
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -79,6 +118,10 @@
                     style="@style/FullViewStyle"
                     android:onClick="taskListClick"
                     android:text="任务列表" />
+                <Button
+                    style="@style/FullViewStyle"
+                    android:onClick="jsonClick"
+                    android:text="json请求" />
             </LinearLayout>
 
 

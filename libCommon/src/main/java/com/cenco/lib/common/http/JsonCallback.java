@@ -15,6 +15,7 @@
  */
 package com.cenco.lib.common.http;
 
+import com.cenco.lib.common.log.LogUtils;
 import com.lzy.okgo.callback.AbsCallback;
 import com.lzy.okgo.request.base.Request;
 
@@ -31,6 +32,8 @@ import okhttp3.Response;
  * 描    述：默认将返回的数据解析成需要的Bean,可以是 BaseBean，String，List，Map
  * 修订历史：
  * ================================================
+ *
+ * 回调在主线程中
  */
 public abstract class JsonCallback<T> extends AbsCallback<T> {
 
@@ -59,6 +62,15 @@ public abstract class JsonCallback<T> extends AbsCallback<T> {
         //        request.headers("header1", "HeaderValue1")//
         //                .params("params1", "ParamsValue1")//
         //                .params("token", "3215sdf13ad1f65asd4f3ads1f");
+
+        LogUtils.d("util","onStart = = = = = = = = >>>\r\n"+request.getUrl());
+
+    }
+
+    @Override
+    public void onError(com.lzy.okgo.model.Response<T> response) {
+        super.onError(response);
+        LogUtils.e("util","onError = = = = = = = = >>>\r\n"+response.getException().getMessage());
     }
 
     /**

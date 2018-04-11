@@ -16,6 +16,7 @@
 package com.cenco.lib.common.http;
 
 import com.cenco.lib.common.json.GsonUtil;
+import com.cenco.lib.common.log.LogUtils;
 import com.google.gson.stream.JsonReader;
 import com.lzy.okgo.convert.Converter;
 
@@ -25,6 +26,7 @@ import org.json.JSONObject;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
@@ -69,71 +71,65 @@ public class GsonConvert<T> implements Converter<T> {
         // 如果你对这里的代码原理不清楚，可以看这里的详细原理说明: https://github.com/jeasonlzy/okhttp-OkGo/wiki/JsonCallback
         // 如果你对这里的代码原理不清楚，可以看这里的详细原理说明: https://github.com/jeasonlzy/okhttp-OkGo/wiki/JsonCallback
 
+        ResponseBody body = response.body();
+        if (body == null){
+            return  null;
+        }
+
+        String text = body.string();
+
+
+        LogUtils.d("util","onResponse = = = = = = = = >>>\r\n"+response.request().toString()+",\r\nResponse:"+text);
+
         if (type == null) {
             if (clazz == null) {
                 // 如果没有通过构造函数传进来，就自动解析父类泛型的真实类型（有局限性，继承后就无法解析到）
                 Type genType = getClass().getGenericSuperclass();
                 type = ((ParameterizedType) genType).getActualTypeArguments()[0];
             } else {
-                return parseClass(response, clazz);
+                return parseClass(text, clazz);
             }
         }
 
         if (type instanceof ParameterizedType) {
-            return parseParameterizedType(response, (ParameterizedType) type);
+            return parseParameterizedType(text, (ParameterizedType) type);
         } else if (type instanceof Class) {
-            return parseClass(response, (Class<?>) type);
+            return parseClass(text, (Class<T>) type);
         } else {
-            return parseType(response, type);
+            return parseType(text, type);
         }
     }
 
-    private T parseClass(Response response, Class<?> rawType) throws Exception {
+    private T parseClass(String text, Class<T> rawType) throws Exception {
         if (rawType == null) return null;
-        ResponseBody body = response.body();
-        if (body == null) return null;
-        JsonReader jsonReader = new JsonReader(body.charStream());
 
         if (rawType == String.class) {
             //noinspection unchecked
-            return (T) body.string();
+            return (T) text;
         } else if (rawType == JSONObject.class) {
             //noinspection unchecked
-            return (T) new JSONObject(body.string());
+            return (T) new JSONObject(text);
         } else if (rawType == JSONArray.class) {
             //noinspection unchecked
-            return (T) new JSONArray(body.string());
+            return (T) new JSONArray(text);
         } else {
-            T t = GsonUtil.fromJson(jsonReader, rawType);
-            response.close();
+            T t = GsonUtil.fromJson(text, rawType);
             return t;
         }
     }
 
-    private T parseType(Response response, Type type) throws Exception {
+    private T parseType(String text, Type type) throws Exception {
         if (type == null) return null;
-        ResponseBody body = response.body();
-        if (body == null) return null;
-        JsonReader jsonReader = new JsonReader(body.charStream());
 
         // 泛型格式如下： new JsonCallback<任意JavaBean>(this)
-        T t = GsonUtil.fromJson(jsonReader, type);
-        response.close();
+        T t = GsonUtil.fromJson(text, type);
         return t;
     }
 
-    private T parseParameterizedType(Response response, ParameterizedType type) throws Exception {
+    private T parseParameterizedType(String text, ParameterizedType type) throws Exception {
         if (type == null) return null;
-        ResponseBody body = response.body();
-        if (body == null) return null;
-        JsonReader jsonReader = new JsonReader(body.charStream());
 
-        Type rawType = type.getRawType();                     // 泛型的实际类型
-        Type typeArgument = type.getActualTypeArguments()[0]; // 泛型的参数
-
-            // 泛型格式如下： new JsonCallback<外层BaseBean<内层JavaBean>>(this)
-            T t = GsonUtil.fromJson(jsonReader, type);
-            response.close();
+            T t = GsonUtil.fromJson(text, type);
             return t;
 
     }

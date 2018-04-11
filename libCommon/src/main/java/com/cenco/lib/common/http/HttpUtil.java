@@ -176,4 +176,21 @@ public class HttpUtil {
     }
 
 
+    /**
+     * 此方法未经测试
+     * @param url
+     * @param jsonString
+     * @param callback
+     * @param <T>
+     */
+    public static<T> void postJson(String url,String jsonString, SimpleCallback<T> callback){
+        checkInit();
+        if (ismock){
+            mockManger.interruptWeb(url,callback);
+            return;
+        }
+        OkGo.<T>post(url).upJson(jsonString).execute(callback);
+    }
+
+
 }

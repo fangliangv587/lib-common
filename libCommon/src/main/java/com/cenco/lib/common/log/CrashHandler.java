@@ -5,7 +5,6 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import android.annotation.SuppressLint;  
 import android.os.SystemClock;
 
-import com.orhanobut.logger.Logger;
 
 /** 
  * <h3>全局捕获异常</h3> 
@@ -65,7 +64,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
      * @return true:如果处理了该异常信息; 否则返回false. 
      */  
     private boolean handleException(Throwable ex) {
-        Logger.e(ex,"message");
+        LogUtils.e("handleException",ex.getMessage());
         return true;
     }
 
