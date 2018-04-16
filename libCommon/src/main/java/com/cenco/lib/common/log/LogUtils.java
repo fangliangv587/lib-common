@@ -14,6 +14,11 @@ import com.orhanobut.logger.PrettyFormatStrategy;
 
 /**
  * Created by Administrator on 2018/3/5.
+ *
+ * the default action is that don't save the log to the sdcard ,you can alter the param of save to save all logs{@link #save },
+ * and also save the log what you want by call the method {@link #i(String, String, boolean)} which contains the params of save.
+ * the default save path is define at   {@link FileUtils#getDefaultLogFilePath()}
+ * the default global tag is {@link #commontag}
  */
 
 public class LogUtils {
@@ -52,6 +57,10 @@ public class LogUtils {
 
         Logger.addLogAdapter(new AndroidLogAdapter(strategy));
 
+
+        if (logPath == null){
+            logPath = FileUtils.getDefaultLogFilePath();
+        }
         //保存到sd卡
         FormatStrategy formatStrategy = TxtFormatStrategy.newBuilder()
                 .tag(tag)
