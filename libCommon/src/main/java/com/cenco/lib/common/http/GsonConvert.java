@@ -79,7 +79,7 @@ public class GsonConvert<T> implements Converter<T> {
         String text = body.string();
 
 
-        LogUtils.d("util","onResponse = = = = = = = = >>>\r\n"+response.request().toString()+",\r\nResponse:"+text);
+        LogUtils.v("util","onResponse = = = = = = = = >>>\r\n"+response.request().toString()+",\r\nResponse:"+text);
 
         if (type == null) {
             if (clazz == null) {

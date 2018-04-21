@@ -90,6 +90,21 @@ public class LogUtils {
         return  isInit && debug;
     }
 
+    public static void v(String tag,String mes,boolean save){
+        if (!printLog()){
+            return;
+        }
+        if (!save){
+            String tag1 = formatTag(tag);
+            Log.v(tag1,mes);
+            return;
+        }
+        if (!TextUtils.isEmpty(tag)){
+            Logger.t(tag);
+        }
+        Logger.v(mes);
+
+    }
     public static void d(String tag,String mes,boolean save){
         if (!printLog()){
             return;
@@ -154,6 +169,9 @@ public class LogUtils {
     }
 
 
+    public static void v(String tag,String mes){
+        v(tag,mes,save);
+    }
     public static void d(String tag,String mes){
         d(tag,mes,save);
     }
@@ -167,6 +185,9 @@ public class LogUtils {
         e(tag,mes,save);
     }
 
+    public static void v(String mes){
+       v(null,mes);
+    }
     public static void d(String mes){
        d(null,mes);
     }

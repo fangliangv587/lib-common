@@ -60,6 +60,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        LogUtils.v("mmmmmm");
         LogUtils.i("helloworld");
         LogUtils.d(null,"hahaha",true);
         LogUtils.w(null,"风雨",false);

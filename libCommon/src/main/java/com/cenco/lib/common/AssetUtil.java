@@ -48,7 +48,7 @@ public class AssetUtil {
                 break;
             }
         }
-        LogUtils.d("assets","dest folder:"+newPath+",file name:"+filename+"----->result:"+result);
+        LogUtils.d("util","dest folder:"+newPath+",file name:"+filename+"----->result:"+result);
         return result;
     }
 

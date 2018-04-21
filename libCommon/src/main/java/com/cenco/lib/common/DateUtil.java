@@ -89,7 +89,7 @@ public class DateUtil {
 			return date;
 		} catch (ParseException e) {
 			e.printStackTrace();
-			LogUtils.d("lib",e.getMessage());
+			LogUtils.e("util",e.getMessage());
 		}
 		return null;
 	}
@@ -225,7 +225,7 @@ public class DateUtil {
 		if (destDate.after(startDate) && destDate.before(stopDate)) {
             result = true;
 		}
-        LogUtils.i("lib-date","isInPeriodDate destDate【"+ dest+"】,start【"+start+"】,stop【"+stop+"】 ----->"+result);
+        LogUtils.v("util","isInPeriodDate destDate【"+ dest+"】,start【"+start+"】,stop【"+stop+"】 ----->"+result);
 		return result;
 	}
     public static boolean isInPeriodDate(Date destDate,Date startDate,Date stopDate){

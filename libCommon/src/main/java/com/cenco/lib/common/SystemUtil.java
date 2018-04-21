@@ -231,12 +231,12 @@ public class SystemUtil {
 						BuildConfig.APPLICATION_ID + ".fileProvider",
 						file);
 				intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                LogUtils.i("take photo from  above android 7");
+                LogUtils.v("take photo from  above android 7");
 				context.startActivityForResult(intent, requestCode);
 				return;
 			}
 
-			LogUtils.i(" takephoto");
+			LogUtils.v(" takephoto");
 			//实例化intent,指向摄像头
 			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			//根据路径实例化图片文件
