@@ -28,11 +28,17 @@ import com.cenco.lib.common.ToastUtil;
 import com.cenco.lib.common.UpdateHelper;
 import com.cenco.lib.common.activity.BaseActivity;
 import com.cenco.lib.common.http.HttpUtil;
+import com.cenco.lib.common.http.SimpleCallback;
 import com.cenco.lib.common.http.SimpleDialogCallback;
 import com.cenco.lib.common.json.GsonUtil;
 import com.cenco.lib.common.log.LogUtils;
+import com.lzy.okgo.callback.BitmapCallback;
+import com.lzy.okgo.callback.Callback;
 import com.lzy.okgo.model.HttpHeaders;
 import com.lzy.okgo.model.HttpParams;
+import com.lzy.okgo.model.Progress;
+import com.lzy.okgo.model.Response;
+import com.lzy.okgo.request.base.Request;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,6 +61,8 @@ public class MainActivity extends BaseActivity {
 
     private String token;
 
+    String path;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,8 +78,15 @@ public class MainActivity extends BaseActivity {
 
         permission();
 
+        initAction();
+
     }
 
+    private void initAction() {
+
+        path = Environment.getExternalStorageDirectory().getAbsolutePath()+ File.separator+"xz"+File.separator+"image";
+        AssetUtil.copyFiles(this,"watermark",path);
+    }
 
 
     private void permission() {
@@ -155,6 +170,21 @@ public class MainActivity extends BaseActivity {
     /**************************************打水印***************************************************/
 
     public void watermarkClick(View view) {
+        String name="a.jpg";
+        if (view.getId()==R.id.btnWaterA){
+            name="a.jpg";
+        }
+        if (view.getId()==R.id.btnWaterB){
+            name="b.jpg";
+        }
+        if (view.getId()==R.id.btnWaterC){
+            name="c.jpg";
+        }
+        if (view.getId()==R.id.btnWaterD){
+            name="d.jpg";
+        }
+
+
         String fontassetpath = "fonts/akong.ttf";
         Typeface typeface = null;
         if (AssetUtil.isFileExists(this,fontassetpath)){
@@ -162,12 +192,12 @@ public class MainActivity extends BaseActivity {
         }
 
 
-        String path = Environment.getExternalStorageDirectory().getAbsolutePath()+File.separator+"xz"+File.separator+"image1.jpg";
-        if(!FileUtils.isFileExists(path)){
+        String imagePath = path+File.separator+name;
+        if(!FileUtils.isFileExists(imagePath)){
             ToastUtil.show(this,"文件不存在");
             return;
         }
-        Bitmap bitmap = BitmapUtil.getBitmap(path);
+        Bitmap bitmap = BitmapUtil.getBitmap(imagePath);
 
         String str  = "快发网络abc";
         String str1  = "快发网络abc,我们都是勇敢的人，我们都是自信的人，我们都是阳光的人";
@@ -286,5 +316,15 @@ public class MainActivity extends BaseActivity {
     }
 
 
+    public void getImageClick(View view) {
+        String url = "http://www.ybol.vip/CheckCode?flag=3";
+        HttpUtil.get(url, new BitmapCallback() {
+            @Override
+            public void onSuccess(Response<Bitmap> response) {
+                Bitmap body = response.body();
+                watermarkImageView.setImageBitmap(body);
+            }
+        });
+    }
 }
 

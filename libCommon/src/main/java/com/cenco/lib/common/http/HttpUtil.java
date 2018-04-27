@@ -5,6 +5,7 @@ import android.app.Application;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.cache.CacheMode;
+import com.lzy.okgo.callback.Callback;
 import com.lzy.okgo.cookie.CookieJarImpl;
 import com.lzy.okgo.cookie.store.MemoryCookieStore;
 import com.lzy.okgo.https.HttpsUtils;
@@ -132,7 +133,7 @@ public class HttpUtil {
      * @param callback
      * @param <T>
      */
-    public static<T> void get(String url,HttpParams params, SimpleCallback<T> callback){
+    public static<T> void get(String url,HttpParams params, Callback<T> callback){
         if (url == null) return;
         if (params !=null){
             String param = params.toString();
@@ -150,7 +151,7 @@ public class HttpUtil {
      * @param callback
      * @param <T>
      */
-    public static<T> void get(String url,SimpleCallback<T> callback){
+    public static<T> void get(String url,Callback<T> callback){
         checkInit();
         if (ismock){
             mockManger.interruptWeb(url,callback);
@@ -166,7 +167,7 @@ public class HttpUtil {
      * @param callback
      * @param <T>
      */
-    public static<T> void post(String url,HttpParams params, SimpleCallback<T> callback){
+    public static<T> void post(String url,HttpParams params, Callback<T> callback){
         checkInit();
         if (ismock){
             mockManger.interruptWeb(url,callback);
@@ -183,7 +184,7 @@ public class HttpUtil {
      * @param callback
      * @param <T>
      */
-    public static<T> void postJson(String url,String jsonString, SimpleCallback<T> callback){
+    public static<T> void postJson(String url,String jsonString, Callback<T> callback){
         checkInit();
         if (ismock){
             mockManger.interruptWeb(url,callback);

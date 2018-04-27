@@ -16,7 +16,6 @@ import java.io.InputStream;
  */
 
 public class AssetUtil {
-    private static String TAG = AssetUtil.class.getSimpleName();
 
 
     /**
@@ -63,7 +62,7 @@ public class AssetUtil {
         long begin = System.currentTimeMillis();
         boolean ret = copyFiles(context, inPath, outPath);
         long end = System.currentTimeMillis();
-        Log.i(TAG, "copyAssetsFilesToData() elapsedTime:" + (end - begin));
+        LogUtils.i("util", "copyAssetsFilesToData() elapsedTime:" + (end - begin));
         return ret;
     }
 
@@ -75,7 +74,7 @@ public class AssetUtil {
      * @param outPath 目标文件夹位置如：/sdcrad/mydir
      */
     public static boolean copyFiles(Context context, String inPath, String outPath) {
-        Log.i(TAG, "copyFiles() inPath:" + inPath + ", outPath:" + outPath);
+        LogUtils.i("util", "copyFiles() inPath:" + inPath + ", outPath:" + outPath);
         String[] fileNames = null;
         try {// 获得Assets一共有几多文件
             fileNames = context.getAssets().list(inPath);
@@ -88,12 +87,12 @@ public class AssetUtil {
             if (fileOutDir.isFile()) {
                 boolean ret = fileOutDir.delete();
                 if (!ret) {
-                    Log.e(TAG, "delete() FAIL:" + fileOutDir.getAbsolutePath());
+                    LogUtils.e("util", "delete() FAIL:" + fileOutDir.getAbsolutePath());
                 }
             }
             if (!fileOutDir.exists()) { // 如果文件路径不存在
                 if (!fileOutDir.mkdirs()) { // 创建文件夹
-                    Log.e(TAG, "mkdirs() FAIL:" + fileOutDir.getAbsolutePath());
+                    LogUtils.e("util", "mkdirs() FAIL:" + fileOutDir.getAbsolutePath());
                     return false;
                 }
             }
@@ -112,12 +111,12 @@ public class AssetUtil {
                 if (fileOut.exists()) {
                     boolean ret = fileOut.delete();
                     if (!ret) {
-                        Log.e(TAG, "delete() FAIL:" + fileOut.getAbsolutePath());
+                        LogUtils.e("util", "delete() FAIL:" + fileOut.getAbsolutePath());
                     }
                 }
                 boolean ret = fileOut.createNewFile();
                 if (!ret) {
-                    Log.e(TAG, "createNewFile() FAIL:" + fileOut.getAbsolutePath());
+                    LogUtils.e("util", "createNewFile() FAIL:" + fileOut.getAbsolutePath());
                 }
                 FileOutputStream fos = new FileOutputStream(fileOut);
                 InputStream is = context.getAssets().open(inPath);

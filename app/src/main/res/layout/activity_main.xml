@@ -66,7 +66,23 @@
                 <Button
                     style="@style/FullViewStyle"
                     android:onClick="watermarkClick"
-                    android:text="打水印" />
+                    android:id="@+id/btnWaterA"
+                    android:text="打水印a" />
+                <Button
+                    style="@style/FullViewStyle"
+                    android:onClick="watermarkClick"
+                    android:id="@+id/btnWaterB"
+                    android:text="打水印b" />
+                <Button
+                    style="@style/FullViewStyle"
+                    android:onClick="watermarkClick"
+                    android:id="@+id/btnWaterC"
+                    android:text="打水印c" />
+                <Button
+                    style="@style/FullViewStyle"
+                    android:onClick="watermarkClick"
+                    android:id="@+id/btnWaterD"
+                    android:text="打水印d" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -103,6 +119,10 @@
                     style="@style/FullViewStyle"
                     android:onClick="getClick"
                     android:text="get请求" />
+                <Button
+                    style="@style/FullViewStyle"
+                    android:onClick="getImageClick"
+                    android:text="get请求图片" />
 
                 <Button
                     style="@style/FullViewStyle"

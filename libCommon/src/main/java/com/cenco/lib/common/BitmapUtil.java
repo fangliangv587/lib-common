@@ -71,11 +71,14 @@ public class BitmapUtil {
         canvas.drawBitmap(bitmap, 0, 0, null);  //绘制原始图片
         canvas.save();
 
+        int minSize = bitmap.getWidth() < bitmap.getHeight() ? bitmap.getWidth() : bitmap.getHeight();
+        int textSize = minSize /10;
+
         canvas.rotate(-45);
         int textColor = Color.BLACK;
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(textColor); //白色半透明
-        paint.setTextSize(80 );
+        paint.setTextSize(textSize);
         paint.setDither(true);
         paint.setFilterBitmap(true);
         paint.setTypeface(typeface);
@@ -172,10 +175,16 @@ public class BitmapUtil {
             return null;
         }
 
-        int itemHeight = 40;
-        int bottomPadding = 20;
-        int textSize = itemHeight -10;//50
-        int validHeight = infos.length * itemHeight + bottomPadding;
+
+        int itemHeight = height/2/5*4/infos.length;
+
+//        int itemHeight = 40;
+        int bottomPadding = itemHeight/10;
+        int textSize = itemHeight -20;//50
+        if (textSize<20){
+            textSize = 20;
+        }
+        int validHeight = infos.length * itemHeight + bottomPadding + bottomPadding;
         if (validHeight>height){
             validHeight = height;
         }
