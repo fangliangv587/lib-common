@@ -98,6 +98,7 @@
                     <ImageView
                         android:id="@+id/infoImageView"
                         android:layout_width="0dp"
+                        android:adjustViewBounds="true"
                         android:layout_height="wrap_content"
                         android:layout_weight="0" />
                 </LinearLayout>

@@ -82,6 +82,7 @@ public class BitmapUtil {
         paint.setDither(true);
         paint.setFilterBitmap(true);
         paint.setTypeface(typeface);
+        paint.setStrokeWidth(10);
 
         //计算文字宽高
         Rect rect = new Rect();
@@ -176,7 +177,13 @@ public class BitmapUtil {
         }
 
 
-        int itemHeight = height/2/5*4/infos.length;
+        float scale = 0.5f;
+        if (width>height){
+            scale=0.8f;
+        }else {
+            scale=0.6f;
+        }
+        int itemHeight = (int) (height/2*scale/infos.length);
 
 //        int itemHeight = 40;
         int bottomPadding = itemHeight/10;
