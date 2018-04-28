@@ -24,6 +24,7 @@ import com.cenco.lib.common.DateUtil;
 import com.cenco.lib.common.FileUtils;
 import com.cenco.lib.common.PermissionManager;
 import com.cenco.lib.common.SPUtil;
+import com.cenco.lib.common.TimerHelper;
 import com.cenco.lib.common.ToastUtil;
 import com.cenco.lib.common.UpdateHelper;
 import com.cenco.lib.common.activity.BaseActivity;
@@ -86,6 +87,20 @@ public class MainActivity extends BaseActivity {
 
         path = Environment.getExternalStorageDirectory().getAbsolutePath()+ File.separator+"xz"+File.separator+"image";
         AssetUtil.copyFiles(this,"watermark",path);
+
+        TimerHelper helper = new TimerHelper(new TimerHelper.TimerListener() {
+            @Override
+            public void onTimerRunning(int current, int total,boolean isOver) {
+//                LogUtils.d("onTimerRunning:"+current+"/"+ total);
+                if (isOver){
+                    LogUtils.i("onTimerRunning结束");
+                }
+            }
+        });
+        helper.setInterval(1);
+//        helper.setTotalSecond(10);
+        helper.start();
+
     }
 
 
