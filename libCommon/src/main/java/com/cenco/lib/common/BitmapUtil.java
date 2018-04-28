@@ -60,7 +60,7 @@ public class BitmapUtil {
      * 图片打水印 并将信息内容合成到图片中
      * @param bitmap
      * @param mark 水印
-     * @param typeface 字体
+     * @param typeface 字体 在某些型号下部分字体无法显示，导致文字无法绘制，建议更换字体
      * @param infos 信息内容
      * example:Bitmap bitmap1 = getWatermarkBitmap( bitmap, "快发网络","时间", "地点","执行人","媒体位置","订单号","方案名称");
      * @return
@@ -77,12 +77,14 @@ public class BitmapUtil {
         canvas.rotate(-45);
         int textColor = Color.BLACK;
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(textColor); //白色半透明
+        paint.setColor(textColor);
         paint.setTextSize(textSize);
         paint.setDither(true);
         paint.setFilterBitmap(true);
-        paint.setTypeface(typeface);
         paint.setStrokeWidth(10);
+        if (typeface!=null){
+            paint.setTypeface(typeface);
+        }
 
         //计算文字宽高
         Rect rect = new Rect();
@@ -120,6 +122,7 @@ public class BitmapUtil {
             }
         }
         canvas.drawText(mark, x1, y1, paint);
+//        canvas.drawCircle(x1,y1,20,paint);
 
         //第二个文字
         int middleLine2 = (int) (bitmap.getHeight()*1f/ratio);
