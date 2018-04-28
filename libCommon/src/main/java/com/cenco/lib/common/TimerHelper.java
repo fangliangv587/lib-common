@@ -5,6 +5,9 @@ import android.util.Log;
 
 import com.cenco.lib.common.log.LogUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TimerHelper {
 
     //倒计时的最大值
@@ -13,8 +16,7 @@ public class TimerHelper {
     private int interval = 1;
 
     private static final String tag = TimerHelper.class.getName();
-    //监听
-    private TimerListener listener;
+
 
 
     //计算消耗的总时间,单位s
@@ -23,6 +25,7 @@ public class TimerHelper {
     //计时器名称
     private String name = "计时器";
 
+    private List<TimerListener> listeners = new ArrayList<>();
 
     private Handler handler = new Handler();
 
@@ -36,9 +39,11 @@ public class TimerHelper {
             //****************无限计时器****************
             if (totalSecond <= 0) {
                 handler.postDelayed(this, interval * 1000);
-                LogUtils.d(name + "(" + TimerHelper.this.hashCode() + ")进行中:" + timer + "/" + totalSecond + "(MAX),thread:" + Thread.currentThread().getName());
-                if (listener != null) {
-                    listener.onTimerRunning(timer, totalSecond,false);
+                LogUtils.v(name + "(" + TimerHelper.this.hashCode() + ")进行中:" + timer + "/" + totalSecond + "(MAX),thread:" + Thread.currentThread().getName());
+                if (listeners .size() != 0) {
+                    for (TimerListener listener :listeners ){
+                        listener.onTimerRunning(timer, totalSecond,false);
+                    }
                 }
                 return;
             }
@@ -49,15 +54,17 @@ public class TimerHelper {
             if (timer >= totalSecond) {
                 isOver = true;
                 handler.removeCallbacks(runnable);
-                LogUtils.d(name + "(" + TimerHelper.this.hashCode() + "):结束" + timer + "/" + totalSecond + ",thread:" + Thread.currentThread().getName());
+                LogUtils.v("util",name + "(" + TimerHelper.this.hashCode() + "):结束" + timer + "/" + totalSecond + ",thread:" + Thread.currentThread().getName());
             } else {
                 handler.postDelayed(this, interval * 1000);
-                LogUtils.d(name + "(" + TimerHelper.this.hashCode() + ")进行中:" + timer + "/" + totalSecond + ",thread:" + Thread.currentThread().getName());
+                LogUtils.v("util",name + "(" + TimerHelper.this.hashCode() + ")进行中:" + timer + "/" + totalSecond + ",thread:" + Thread.currentThread().getName());
 
             }
 
-            if (listener != null) {
-                listener.onTimerRunning(timer, totalSecond,isOver);
+            if (listeners .size() != 0) {
+                for (TimerListener listener :listeners ){
+                    listener.onTimerRunning(timer, totalSecond,isOver);
+                }
             }
 
 
@@ -70,7 +77,7 @@ public class TimerHelper {
     public TimerHelper(int totalSecond, TimerListener listener) {
         super();
         this.totalSecond = totalSecond;
-        this.listener = listener;
+        listeners.add(listener);
 
     }
 
@@ -114,6 +121,19 @@ public class TimerHelper {
         handler.removeCallbacks(runnable);
         Log.i(tag, name + "(" + TimerHelper.this.hashCode() + "):被中止 " + timer + "/" + totalSecond + ",thread:" + Thread.currentThread().getName());
 
+    }
+
+
+    public void addListener(TimerListener listener){
+        listeners.add(listener);
+    }
+
+    public void removeListener(TimerListener listener){
+        listeners.remove(listener);
+    }
+
+    public void removeAllListener(){
+        listeners.clear();
     }
 
 
