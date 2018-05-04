@@ -35,6 +35,7 @@ import com.cenco.lib.common.json.GsonUtil;
 import com.cenco.lib.common.log.LogUtils;
 import com.lzy.okgo.callback.BitmapCallback;
 import com.lzy.okgo.callback.Callback;
+import com.lzy.okgo.callback.FileCallback;
 import com.lzy.okgo.model.HttpHeaders;
 import com.lzy.okgo.model.HttpParams;
 import com.lzy.okgo.model.Progress;
@@ -80,6 +81,8 @@ public class MainActivity extends BaseActivity {
         permission();
 
         initAction();
+
+
 
     }
 
@@ -195,9 +198,7 @@ public class MainActivity extends BaseActivity {
         if (view.getId()==R.id.btnWaterC){
             name="c.jpg";
         }
-        if (view.getId()==R.id.btnWaterD){
-            name="d.jpg";
-        }
+
 
 
         String fontassetpath = "fonts/akong.ttf";
@@ -234,7 +235,7 @@ public class MainActivity extends BaseActivity {
     /**************************************网络请求部分***************************************************/
 
     public void getClick(View view) {
-        String url ="http://192.168.3.13:3000/api/getUserName?id=1";
+        String url ="http://172.26.96.1:3000/api/getUserName?id=1";
         HttpUtil.get(url, new SimpleDialogCallback<Result<User>>(this) {
             @Override
             public void onSuccess(Result<User> s) {
@@ -251,7 +252,7 @@ public class MainActivity extends BaseActivity {
 
     public void postClick(View view) {
 
-        String url ="http://192.168.3.13:3000/api/setUserAddress";
+        String url ="http://172.26.96.1:3000/api/setUserAddress";
         HttpParams params = new HttpParams();
         params.put("address","济南市");
         HttpUtil.post(url, params, new SimpleDialogCallback<Result<String>>(this) {
@@ -269,7 +270,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public void postFileClick(View view) {
-        String url ="http://192.168.3.13:3000/api/upload";
+        String url ="http://172.26.96.1:3000/api/upload";
         String path  = Environment.getExternalStorageDirectory().getAbsolutePath()+ File.separator+"xz"+File.separator+"xz.jpg";
         File file = new File(path);
         if (!file.exists()){
@@ -294,7 +295,7 @@ public class MainActivity extends BaseActivity {
 
     public void taskListClick(View view) {
 
-        String url ="http://192.168.3.13:3000/api/getTaskList";
+        String url ="http://172.26.96.1:3000/api/getTaskList";
         HttpParams params = new HttpParams();
         params.put("address","济南市");
         HttpUtil.post(url, params, new SimpleDialogCallback<Result<List<Task>>>(this) {
@@ -314,7 +315,7 @@ public class MainActivity extends BaseActivity {
 
 
     public void jsonClick(View view) {
-        String url ="http://192.168.3.13:3000/api/getTaskList";
+        String url ="http://172.26.96.1:3000/api/getTaskList";
         String str = "";
         HttpUtil.postJson(url, str, new SimpleDialogCallback<String>(this) {
             @Override
@@ -338,6 +339,29 @@ public class MainActivity extends BaseActivity {
             public void onSuccess(Response<Bitmap> response) {
                 Bitmap body = response.body();
                 watermarkImageView.setImageBitmap(body);
+            }
+        });
+    }
+
+    public void downloadClick(View view) {
+        LogUtils.w("downloadClick");
+        String url = "http://kuaifa.tv/updateversion/adAssist.apk";
+        HttpUtil.download(url, new FileCallback() {
+            @Override
+            public void onSuccess(Response<File> response) {
+                LogUtils.v("download","onSuccess:"+response.body().getAbsolutePath());
+            }
+
+            @Override
+            public void downloadProgress(Progress progress) {
+                super.downloadProgress(progress);
+                LogUtils.v("download",progress.fraction+"");
+            }
+
+            @Override
+            public void onError(Response<File> response) {
+                super.onError(response);
+                LogUtils.e("download",response.getException().getMessage());
             }
         });
     }

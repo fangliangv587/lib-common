@@ -78,11 +78,7 @@
                     android:onClick="watermarkClick"
                     android:id="@+id/btnWaterC"
                     android:text="打水印c" />
-                <Button
-                    style="@style/FullViewStyle"
-                    android:onClick="watermarkClick"
-                    android:id="@+id/btnWaterD"
-                    android:text="打水印d" />
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -143,6 +139,11 @@
                     style="@style/FullViewStyle"
                     android:onClick="jsonClick"
                     android:text="json请求" />
+
+                <Button
+                    style="@style/FullViewStyle"
+                    android:onClick="downloadClick"
+                    android:text="下载" />
             </LinearLayout>
 
 

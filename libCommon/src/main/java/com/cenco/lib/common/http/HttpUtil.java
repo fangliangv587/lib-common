@@ -6,6 +6,7 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.callback.Callback;
+import com.lzy.okgo.callback.FileCallback;
 import com.lzy.okgo.cookie.CookieJarImpl;
 import com.lzy.okgo.cookie.store.MemoryCookieStore;
 import com.lzy.okgo.https.HttpsUtils;
@@ -13,6 +14,7 @@ import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
 import com.lzy.okgo.model.HttpHeaders;
 import com.lzy.okgo.model.HttpParams;
 
+import java.io.File;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
@@ -191,6 +193,21 @@ public class HttpUtil {
             return;
         }
         OkGo.<T>post(url).upJson(jsonString).execute(callback);
+    }
+
+    /**
+     * 简单的文件下载
+     * @param url
+     * @param callback 可指定下载目录，见https://github.com/jeasonlzy/okhttp-OkGo/wiki/OkGo#5%E5%9F%BA%E6%9C%AC%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD
+     */
+    public static void download(String url,FileCallback callback){
+        checkInit();
+        if (ismock){
+            mockManger.interruptWeb(url,callback);
+            return;
+        }
+
+        OkGo.<File>get(url).execute(callback);
     }
 
 
