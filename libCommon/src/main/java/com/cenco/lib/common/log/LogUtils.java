@@ -15,7 +15,7 @@ import com.orhanobut.logger.PrettyFormatStrategy;
 /**
  * Created by Administrator on 2018/3/5.
  *
- * the default action is that don't save the log to the sdcard ,you can alter the param of save to save all logs{@link #save },
+ * the default action is that don't save the log to the sdcard ,you can alter the param of save to save all logs{@link # },
  * and also save the log what you want by call the method {@link #i(String, String, boolean)} which contains the params of save.
  * the default save path is define at   {@link FileUtils#getDefaultLogFilePath()}
  * the default global tag is {@link #commontag}
@@ -27,12 +27,15 @@ public class LogUtils {
     private static boolean isInit = false;
     public static boolean debug = true;
     /*是否全局保存*/
-    public static boolean save = false;
 
-    public static void init(String tag,boolean isFormat, String logPath){
+    public static int saveLevel = Level.ERROR;
+
+    public static void init(String tag,int level, String logPath){
         if (isInit){
             return;
         }
+
+        saveLevel = level;
 
         if (tag==null){
             tag = commontag;
@@ -44,24 +47,16 @@ public class LogUtils {
 
 
         //输出到控制台
-        FormatStrategy strategy = null;
-        if (isFormat){
-            strategy= PrettyFormatStrategy.newBuilder()
+        FormatStrategy strategy = SimpleFormatStrategy.newBuilder()
                     .tag(tag)
                     .build();
-        }else {
-            strategy = SimpleFormatStrategy.newBuilder()
-                    .tag(tag)
-                    .build();
-        }
-
         Logger.addLogAdapter(new AndroidLogAdapter(strategy));
 
 
+        //保存到sd卡
         if (logPath == null){
             logPath = FileUtils.getDefaultLogFilePath();
         }
-        //保存到sd卡
         FormatStrategy formatStrategy = TxtFormatStrategy.newBuilder()
                 .tag(tag)
                 .logPath(logPath)
@@ -79,10 +74,10 @@ public class LogUtils {
     }
 
     public static void init(String generalTag){
-        init(generalTag,false);
+        init(generalTag,Level.ERROR);
     }
-    public static void init(String generalTag,boolean isFormat){
-        init(generalTag,isFormat,FileUtils.getDefaultLogFilePath());
+    public static void init(String generalTag,int level){
+        init(generalTag,level,FileUtils.getDefaultLogFilePath());
     }
 
 
@@ -171,20 +166,22 @@ public class LogUtils {
 
 
     public static void v(String tag,String mes){
-        v(tag,mes,save);
+        v(tag,mes,Level.VERBOSE>=saveLevel);
     }
     public static void d(String tag,String mes){
-        d(tag,mes,save);
+        d(tag,mes,Level.DEBUG>=saveLevel);
     }
     public static void i(String tag,String mes){
-        i(tag,mes,save);
+        i(tag,mes,Level.INFO>=saveLevel);
     }
     public static void w(String tag,String mes){
-        w(tag,mes,save);
+        w(tag,mes,Level.WARN>=saveLevel);
     }
     public static void e(String tag,String mes){
-        e(tag,mes,save);
+        e(tag,mes,Level.ERROR>=saveLevel);
     }
+
+
 
     public static void v(String mes){
        v(null,mes);

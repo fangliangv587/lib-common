@@ -72,8 +72,8 @@ public class MainActivity extends BaseActivity {
 
         LogUtils.v("mmmmmm");
         LogUtils.i("helloworld");
-        LogUtils.d("xz","hahaha");
-        LogUtils.w("xin","风雨");
+        LogUtils.d("xz","hahaha",true);
+        LogUtils.w("xin","风雨",true);
         LogUtils.e("zhong","填写");
 
         initView();
