@@ -10,6 +10,8 @@ import com.orhanobut.logger.LogStrategy;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Abstract class that takes care of background threading the file log operation on Android.
@@ -123,31 +125,31 @@ public class DiskLogStrategy implements LogStrategy {
        * @return
        */
       public static String getSubTagName(String mes){
-          String tag = "tag";
-          if (mes == null || mes.length() == 0){
-              return tag;
+
+          String defaultTag ="defaultTag";
+          String rgex = "/(.*?) : ";
+          Pattern pattern = Pattern.compile(rgex);// 匹配的模式
+          Matcher m = pattern.matcher(mes);
+          if(!m.find()){
+              return defaultTag;
           }
 
-          if (!mes.contains(":")){
-              return tag;
+          String group = m.group(1);
+          if (group.contains("-")){
+              int start = group.indexOf("-")+1;
+              String maintTag = group.substring(0,start-1);
+              if (start == group.length()){
+                  return maintTag;
+              }
+              String subTag = group.substring(start, group.length()).trim();
+              if (subTag.equals("")){
+                  return maintTag;
+              }
+
+              return subTag;
           }
-          int start =0;
-          int end = mes.lastIndexOf(":");
-          if (mes.contains("/")){
-              start = mes.indexOf("/")+1;
-          }
 
-          String tagInfo= mes.substring(start,end);
-          if (!tagInfo.contains("-")){
-              return tagInfo.trim();
-          }
-
-          start = tagInfo.indexOf("-")+1;
-          end = tagInfo.length();
-          String subTag = tagInfo.substring(start, end);
-
-          return subTag.trim();
-
+          return group;
       }
 
   }
