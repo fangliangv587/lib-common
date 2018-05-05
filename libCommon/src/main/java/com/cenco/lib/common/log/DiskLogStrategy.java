@@ -55,8 +55,10 @@ public class DiskLogStrategy implements LogStrategy {
     @Override public void handleMessage(Message msg) {
       String content = (String) msg.obj;
 
+      String subTag =getSubTagName(content);
+
       FileWriter fileWriter = null;
-      File logFile = getLogFile(folder, "logs");
+      File logFile = getLogFile(folder, subTag,"logs");
 
       try {
         fileWriter = new FileWriter(logFile, true);
@@ -86,9 +88,9 @@ public class DiskLogStrategy implements LogStrategy {
       fileWriter.append(content);
     }
 
-    private File getLogFile(String folderName, String fileName) {
+    private File getLogFile(String folderName,String subFolderName,String fileName) {
 
-      File folder = new File(folderName);
+      File folder = new File(folderName+File.separator+subFolderName);
       if (!folder.exists()) {
         //TODO: What if folder is not created, what happens then?
         folder.mkdirs();
@@ -114,5 +116,41 @@ public class DiskLogStrategy implements LogStrategy {
 
       return newFile;
     }
+
+      /**
+       * 获取子tag的名称，没有则返回 主tag
+       * @param mes 格式 I/libsample-util: xxxx
+       * @return
+       */
+      public static String getSubTagName(String mes){
+          String tag = "tag";
+          if (mes == null || mes.length() == 0){
+              return tag;
+          }
+
+          if (!mes.contains(":")){
+              return tag;
+          }
+          int start =0;
+          int end = mes.lastIndexOf(":");
+          if (mes.contains("/")){
+              start = mes.indexOf("/")+1;
+          }
+
+          String tagInfo= mes.substring(start,end);
+          if (!tagInfo.contains("-")){
+              return tagInfo.trim();
+          }
+
+          start = tagInfo.indexOf("-")+1;
+          end = tagInfo.length();
+          String subTag = tagInfo.substring(start, end);
+
+          return subTag.trim();
+
+      }
+
   }
+
+
 }

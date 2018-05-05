@@ -14,6 +14,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         LogUtils.init("libsample");
+        LogUtils.save =true;
         HttpUtil.init(this,false);
     }
 }
