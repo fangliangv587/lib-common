@@ -1,6 +1,7 @@
 package com.cenco.lib.common;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ClipData;
@@ -9,6 +10,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -275,4 +278,93 @@ public class SystemUtil {
 		}
 		return null;
 	}
+
+	/**
+	 * 检查网络是否可用
+	 *
+	 * @param context
+	 * @return
+	 */
+	@SuppressLint("MissingPermission")
+	public static boolean isNetworkAvailable(Context context) {
+
+		ConnectivityManager manager = (ConnectivityManager) context
+				.getApplicationContext().getSystemService(
+						Context.CONNECTIVITY_SERVICE);
+
+		if (manager == null) {
+			return false;
+		}
+
+		NetworkInfo networkinfo = manager.getActiveNetworkInfo();
+
+		if (networkinfo == null || !networkinfo.isAvailable()) {
+			return false;
+		}
+
+		return true;
+	}
+
+
+	/**
+	 * 判断WIFI网络是否可用
+	 * @param context
+	 * @return
+	 */
+	@SuppressLint("MissingPermission")
+	public static boolean isWifiConnected(Context context) {
+		if (context != null) {
+			ConnectivityManager mConnectivityManager = (ConnectivityManager) context
+					.getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo mWiFiNetworkInfo = mConnectivityManager
+					.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+			if (mWiFiNetworkInfo != null) {
+				return mWiFiNetworkInfo.isAvailable();
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * 判断MOBILE网络是否可用
+	 * @param context
+	 * @return
+	 */
+	@SuppressLint("MissingPermission")
+	public static boolean isMobileConnected(Context context) {
+		if (context != null) {
+			ConnectivityManager mConnectivityManager = (ConnectivityManager) context
+					.getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo mMobileNetworkInfo = mConnectivityManager
+					.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+			if (mMobileNetworkInfo != null) {
+				return mMobileNetworkInfo.isAvailable();
+			}
+		}
+		return false;
+	}
+
+
+	/**
+	 * ping命令判断网络
+	 * @param ipAddress
+	 * @return
+	 */
+	private static boolean pingIpAddress(String ipAddress) {
+		try {
+			Process process = Runtime.getRuntime().exec("/system/bin/ping -c 1 -w 100 " + ipAddress);
+			int status = process.waitFor();
+			if (status == 0) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
 }
