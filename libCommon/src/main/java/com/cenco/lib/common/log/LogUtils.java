@@ -90,82 +90,83 @@ public class LogUtils {
         return  isInit && debug;
     }
 
-    public static void v(String tag,String mes,boolean save){
+    private static void log(int level,String tag,String mes,boolean save){
         if (!printLog()){
             return;
         }
         if (!save){
             String tag1 = formatTag(tag);
-            Log.v(tag1,mes);
+            log(level,tag1,mes);
             return;
         }
         if (!TextUtils.isEmpty(tag)){
             Logger.t(tag);
         }
-        Logger.v(mes);
+        logger(level,tag,mes);
+    }
 
+    private static void log(int level,String tag,String mes){
+        switch (level){
+            case Level.VERBOSE:
+                Log.v(tag,mes);
+                break;
+            case Level.DEBUG:
+                Log.d(tag,mes);
+                break;
+            case Level.INFO:
+                Log.i(tag,mes);
+                break;
+            case Level.WARN:
+                Log.w(tag,mes);
+                break;
+            case Level.ERROR:
+                Log.e(tag,mes);
+                break;
+            default:
+                Log.d(tag,mes);
+                break;
+        }
+    }
+
+
+    private static void logger(int level,String tag,String mes){
+        switch (level){
+            case Level.VERBOSE:
+                Logger.v(mes);
+                break;
+            case Level.DEBUG:
+                Logger.d(mes);
+                break;
+            case Level.INFO:
+                Logger.i(mes);
+                break;
+            case Level.WARN:
+                Logger.w(mes);
+                break;
+            case Level.ERROR:
+                Logger.e(mes);
+                break;
+            default:
+                Logger.d(mes);
+                break;
+        }
+    }
+
+    public static void v(String tag,String mes,boolean save){
+        log(Level.VERBOSE,tag,mes,save);
     }
     public static void d(String tag,String mes,boolean save){
-        if (!printLog()){
-            return;
-        }
-        if (!save){
-            String tag1 = formatTag(tag);
-            Log.d(tag1,mes);
-            return;
-        }
-        if (!TextUtils.isEmpty(tag)){
-            Logger.t(tag);
-        }
-        Logger.d(mes);
+        log(Level.DEBUG,tag,mes,save);
 
     }
     public static void i(String tag,String mes,boolean save){
-        if (!printLog()){
-            return;
-        }
-        if (!save){
-            String tag1 = formatTag(tag);
-            Log.i(tag1,mes);
-            return;
-        }
-
-        if (!TextUtils.isEmpty(tag)){
-            Logger.t(tag);
-        }
-        Logger.i(mes);
+        log(Level.INFO,tag,mes,save);
     }
     public static void w(String tag,String mes,boolean save){
-        if (!printLog()){
-            return;
-        }
-
-        if (!save){
-            String tag1 = formatTag(tag);
-            Log.w(tag1,mes);
-            return;
-        }
-
-        if (!TextUtils.isEmpty(tag)){
-            Logger.t(tag);
-        }
-        Logger.w(mes);
+        log(Level.WARN,tag,mes,save);
     }
     public static void e(String tag,String mes,boolean save){
-        if (!printLog()){
-            return;
-        }
-
-        if (!save){
-            String tag1 = formatTag(tag);
-            Log.e(tag1,mes);
-            return;
-        }
-
-        if (!TextUtils.isEmpty(tag)){
-            Logger.t(tag);
-        }
-        Logger.e(mes);
+        log(Level.ERROR,tag,mes,save);
     }
 
 
