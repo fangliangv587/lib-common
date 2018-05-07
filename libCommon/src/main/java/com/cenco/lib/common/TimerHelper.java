@@ -39,7 +39,7 @@ public class TimerHelper {
             //****************无限计时器****************
             if (totalSecond <= 0) {
                 handler.postDelayed(this, interval * 1000);
-                LogUtils.v("util",name + "(" + TimerHelper.this.hashCode() + ")进行中:" + timer + "/" + totalSecond + "(MAX),thread:" + Thread.currentThread().getName(),false);
+                LogUtils.v("util",name + "(" + TimerHelper.this.hashCode() + ")进行中:" + timer + "/" + totalSecond + "(MAX),thread:" + Thread.currentThread().getName());
                 if (listeners .size() != 0) {
                     for (TimerListener listener :listeners ){
                         listener.onTimerRunning(timer, totalSecond,false);
@@ -57,7 +57,7 @@ public class TimerHelper {
                 LogUtils.v("util",name + "(" + TimerHelper.this.hashCode() + "):结束" + timer + "/" + totalSecond + ",thread:" + Thread.currentThread().getName());
             } else {
                 handler.postDelayed(this, interval * 1000);
-                LogUtils.v("util",name + "(" + TimerHelper.this.hashCode() + ")进行中:" + timer + "/" + totalSecond + ",thread:" + Thread.currentThread().getName(),false);
+                LogUtils.v("util",name + "(" + TimerHelper.this.hashCode() + ")进行中:" + timer + "/" + totalSecond + ",thread:" + Thread.currentThread().getName());
 
             }
 

@@ -109,26 +109,43 @@ public class DateUtil {
         return value;
 	}
 
+    /**
+     * 请确认年月日有效
+     * @param year  0-10000
+     * @param month 1-12
+     * @param day 不固定，<=31
+     * @param hour
+     * @param minute
+     * @param second
+     * @return
+     */
 	public static Date createDate(int year,int month,int day,int hour,int minute,int second){
+	    String err = "请确认年月日有效";
 	    if (year>10000 || year < 0){
+	        LogUtils.w("util",err);
 	        return null;
         }
         if (month<=0 || month>12){
+            LogUtils.w("util",err);
 	        return null;
         }
         //未完善
         if (day>31 || day<= 0){
+            LogUtils.w("util",err);
             return null;
         }
 
         if (hour<0 || hour>23){
+            LogUtils.w("util",err);
             return null;
         }
 
         if (minute<0 || minute>59){
+            LogUtils.w("util",err);
             return null;
         }
         if (second<0 || second>59){
+            LogUtils.w("util",err);
             return null;
         }
 
@@ -206,16 +223,17 @@ public class DateUtil {
 	 */
 	public static boolean isInPeriodDate(Date destDate,Date startDate,Date stopDate,String format){
 
+	    if (destDate == null || startDate == null || stopDate == null){
+	        return false;
+        }
+
         destDate = getFormatDate(destDate,format);
         startDate = getFormatDate(startDate,format);
         stopDate = getFormatDate(stopDate,format);
 
-        //**** start:just for print ****/
-        String dest = getDateString(destDate, format);
-        String start = getDateString(startDate, format);
-        String stop = getDateString(stopDate, format);
-
-        //**** stop:just for print ****/
+        if (destDate == null || startDate == null || stopDate == null){
+            return false;
+        }
 
         boolean result = false;
 		if (destDate.equals(startDate) || destDate.equals(stopDate)) {
@@ -225,7 +243,7 @@ public class DateUtil {
 		if (destDate.after(startDate) && destDate.before(stopDate)) {
             result = true;
 		}
-        LogUtils.v("util","isInPeriodDate destDate【"+ dest+"】,start【"+start+"】,stop【"+stop+"】 ----->"+result);
+        LogUtils.v("util","isInPeriodDate destDate【"+ destDate.toString()+"】,start【"+startDate.toString()+"】,stop【"+stopDate.toString()+"】 ----->"+result);
 		return result;
 	}
     public static boolean isInPeriodDate(Date destDate,Date startDate,Date stopDate){
