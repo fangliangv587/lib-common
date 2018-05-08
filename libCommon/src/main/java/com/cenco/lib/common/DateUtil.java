@@ -158,7 +158,7 @@ public class DateUtil {
 	    return createDate(year, month, day,0,0,0);
     }
     public static Date createHMSDate(int hour,int minute,int second){
-	    return createDate(0, 0, 0,hour,minute,second);
+	    return createDate(1, 1, 1,hour,minute,second);
     }
 
 	public static int getYear(Date date){

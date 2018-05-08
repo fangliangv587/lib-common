@@ -121,7 +121,7 @@ public class DiskLogStrategy implements LogStrategy {
 
       /**
        * 获取子tag的名称，没有则返回 主tag
-       * @param mes 格式 I/libsample-util: xxxx
+       * @param mes 格式 I/libsample-util : xxxx(非终端打印格式，见文件保存格式)
        * @return
        */
       public static String getSubTagName(String mes){
