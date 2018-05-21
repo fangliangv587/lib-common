@@ -4,12 +4,14 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
+import com.cenco.lib.common.DateUtil;
 import com.cenco.lib.common.FileUtils;
 import com.orhanobut.logger.LogStrategy;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -92,7 +94,8 @@ public class DiskLogStrategy implements LogStrategy {
 
     private File getLogFile(String folderName,String subFolderName,String fileName) {
 
-      File folder = new File(folderName+File.separator+subFolderName);
+        String date = DateUtil.getDateString(new Date(), DateUtil.FORMAT_YMD);
+        File folder = new File(folderName+File.separator+date+File.separator+subFolderName);
       if (!folder.exists()) {
         //TODO: What if folder is not created, what happens then?
         folder.mkdirs();
