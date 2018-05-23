@@ -83,8 +83,16 @@ public class MainActivity extends BaseActivity {
 
         initAction();
 
+        test();
 
+    }
 
+    private void test(){
+        HttpParams params = new HttpParams();
+        params.put("display_id","ddd");
+        params.put("task_compound_id","111");
+        params.put("status","0");
+        HttpUtil.get("www.baidu.com", params, null);
     }
 
     private void initAction() {

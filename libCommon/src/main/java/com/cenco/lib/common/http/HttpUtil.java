@@ -15,6 +15,8 @@ import com.lzy.okgo.model.HttpHeaders;
 import com.lzy.okgo.model.HttpParams;
 
 import java.io.File;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
@@ -138,7 +140,14 @@ public class HttpUtil {
     public static<T> void get(String url,HttpParams params, Callback<T> callback){
         if (url == null) return;
         if (params !=null){
-            String param = params.toString();
+
+            StringBuilder result = new StringBuilder();
+            for (ConcurrentHashMap.Entry<String, List<String>> entry : params.urlParamsMap.entrySet()) {
+                if (result.length() > 0) result.append("&");
+                result.append(entry.getKey()).append("=").append(entry.getValue().get(0));
+            }
+
+            String param = result.toString();
             if (!url.contains("?")){
                 url +="?";
             }
