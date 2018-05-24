@@ -83,17 +83,11 @@ public class MainActivity extends BaseActivity {
 
         initAction();
 
-        test();
+
 
     }
 
-    private void test(){
-        HttpParams params = new HttpParams();
-        params.put("display_id","ddd");
-        params.put("task_compound_id","111");
-        params.put("status","0");
-        HttpUtil.get("www.baidu.com", params, null);
-    }
+
 
     private void initAction() {
 
@@ -161,31 +155,9 @@ public class MainActivity extends BaseActivity {
             }
         });
     }
-    public void loginClick(View view) {
-        String url ="http://devapi.kuaifa.tv/mediaAide/v1/login/login";
-        HttpParams params = new HttpParams();
-        params.put("username","媒体上刊员工001");
-        params.put("password","123456");
-        HttpUtil.post(url, params, new SimpleDialogCallback<String>(this) {
-            @Override
-            public void onSuccess(String s) {
-                LogUtils.d("api",s.toString());
-                try {
-                    JSONObject jo= new JSONObject(s);
-                    token = jo.getJSONObject("data").getString("token");
-                    HttpUtil.addCommonHeaders(new HttpHeaders("Authorization",token));
-                    LogUtils.i("api",token);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onError(String reason) {
-                LogUtils.e("api",reason);
-                ToastUtil.show(mContext,reason);
-            }
-        });
+    public void exceptionClick(View view) {
+       int a=0;
+       int b= 5/a;
     }
 
     /**************************************升级***************************************************/

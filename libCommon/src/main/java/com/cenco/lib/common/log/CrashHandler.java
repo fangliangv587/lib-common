@@ -1,5 +1,8 @@
 package com.cenco.lib.common.log;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.lang.Thread.UncaughtExceptionHandler;
 
 import android.annotation.SuppressLint;  
@@ -64,7 +67,19 @@ public class CrashHandler implements UncaughtExceptionHandler {
      * @return true:如果处理了该异常信息; 否则返回false. 
      */  
     private boolean handleException(Throwable ex) {
-        LogUtils.e("CrashHandler","reason:"+ex.getMessage(),true);
+
+        Writer writer = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(writer);
+        ex.printStackTrace(printWriter);
+        Throwable cause = ex.getCause();
+        while (cause != null) {
+            cause.printStackTrace(printWriter);
+            cause = cause.getCause();
+        }
+        printWriter.close();
+        String result = writer.toString();
+
+        LogUtils.e("CrashHandler","reason:"+result,true);
         return true;
     }
 

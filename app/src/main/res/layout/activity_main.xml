@@ -29,8 +29,8 @@
 
                 <Button
                     style="@style/FullViewStyle"
-                    android:onClick="loginClick"
-                    android:text="登录" />
+                    android:onClick="exceptionClick"
+                    android:text="异常信息log" />
                 <Button
                     style="@style/FullViewStyle"
                     android:onClick="taskListClickRecieved"
