@@ -1,6 +1,13 @@
-通用库
-gradle集成
-首先在根gradle中加入
-maven { url "https://www.jitpack.io" }
-然后在引用的项目gradle中加入
-com.github.fangliangv587:lib-common:0.1.3
+####Step 1. Add the JitPack repository to your build file
+    allprojects {
+        repositories {
+	        maven { url 'https://jitpack.io' }
+        }
+    }
+	
+####Step 2. Add the dependency
+    dependencies {
+        implementation 'com.github.fangliangv587:lib-common:0.3.2'
+    }
+
+
