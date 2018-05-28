@@ -29,11 +29,6 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-
-    testImplementation 'junit:junit:4.12'
-
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-
     implementation 'com.github.bumptech.glide:glide:3.7.0'//图片加载库
     implementation 'com.orhanobut:logger:2.1.1'//log日志库
     implementation 'com.google.code.gson:gson:2.8.0'//json解析库
