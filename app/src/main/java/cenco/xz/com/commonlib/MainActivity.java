@@ -215,8 +215,9 @@ public class MainActivity extends BaseActivity {
 
     /**************************************网络请求部分***************************************************/
 
+    String host = "http://192.168.0.110:3000";
     public void getClick(View view) {
-        String url ="http://172.26.96.1:3000/api/getUserName?id=1";
+        String url =host+"/api/getUserName?id=1";
         HttpUtil.get(url, new SimpleDialogCallback<Result<User>>(this) {
             @Override
             public void onSuccess(Result<User> s) {
@@ -233,7 +234,7 @@ public class MainActivity extends BaseActivity {
 
     public void postClick(View view) {
 
-        String url ="http://172.26.96.1:3000/api/setUserAddress";
+        String url =host+"/api/setUserAddress";
         HttpParams params = new HttpParams();
         params.put("address","济南市");
         HttpUtil.post(url, params, new SimpleDialogCallback<Result<String>>(this) {
@@ -251,7 +252,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public void postFileClick(View view) {
-        String url ="http://172.26.96.1:3000/api/upload";
+        String url =host+"/api/upload";
         String path  = Environment.getExternalStorageDirectory().getAbsolutePath()+ File.separator+"xz"+File.separator+"xz.jpg";
         File file = new File(path);
         if (!file.exists()){
@@ -276,7 +277,7 @@ public class MainActivity extends BaseActivity {
 
     public void taskListClick(View view) {
 
-        String url ="http://172.26.96.1:3000/api/getTaskList";
+        String url =host+"/api/getTaskList";
         HttpParams params = new HttpParams();
         params.put("address","济南市");
         HttpUtil.post(url, params, new SimpleDialogCallback<Result<List<Task>>>(this) {
@@ -296,7 +297,7 @@ public class MainActivity extends BaseActivity {
 
 
     public void jsonClick(View view) {
-        String url ="http://172.26.96.1:3000/api/getTaskList";
+        String url =host+"/api/getTaskList";
         String str = "";
         HttpUtil.postJson(url, str, new SimpleDialogCallback<String>(this) {
             @Override

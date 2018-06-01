@@ -1,1 +1,1 @@
-include ':app', ':libCommon'
+include ':app', ':libCommon', ':eclipseuselib'
