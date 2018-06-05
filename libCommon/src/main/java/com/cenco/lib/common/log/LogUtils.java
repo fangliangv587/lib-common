@@ -11,6 +11,10 @@ import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.Logger;
 import com.orhanobut.logger.PrettyFormatStrategy;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
+
 
 /**
  * Created by Administrator on 2018/3/5.
@@ -165,6 +169,7 @@ public class LogUtils {
     }
 
 
+
     public static void v(String tag,String mes){
         v(tag,mes,Level.VERBOSE>=saveLevel);
     }
@@ -178,6 +183,10 @@ public class LogUtils {
         w(tag,mes,Level.WARN>=saveLevel);
     }
     public static void e(String tag,String mes){
+        e(tag,mes,Level.ERROR>=saveLevel);
+    }
+    public static void e(String tag,Throwable throwable){
+        String mes = getExceptionLog(throwable);
         e(tag,mes,Level.ERROR>=saveLevel);
     }
 
@@ -197,6 +206,28 @@ public class LogUtils {
     }
     public static void e(String mes){
         e(null,mes);
+    }
+
+    public static void e(Throwable throwable){
+        String log = getExceptionLog(throwable);
+        e(log);
+    }
+
+    public static String getExceptionLog(Throwable throwable){
+        if (throwable==null){
+            return "throwable is null obj !";
+        }
+        Writer writer = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(writer);
+        throwable.printStackTrace(printWriter);
+        Throwable cause = throwable.getCause();
+        while (cause != null) {
+            cause.printStackTrace(printWriter);
+            cause = cause.getCause();
+        }
+        printWriter.close();
+        String result = writer.toString();
+        return result;
     }
 
     private static String formatTag(String tag) {

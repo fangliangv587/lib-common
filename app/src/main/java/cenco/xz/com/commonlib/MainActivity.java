@@ -70,12 +70,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        LogUtils.v("mmmmmm");
-        LogUtils.i("helloworld");
-        LogUtils.d("xz","hahaha",true);
-        LogUtils.w("xin","风雨",true);
-        LogUtils.e("zhong","填写");
-        LogUtils.d("----显示时间:" );
+        testLog();
 
         initView();
 
@@ -87,6 +82,25 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    private void testLog() {
+        LogUtils.v("mmmmmm");
+        LogUtils.i("helloworld");
+        LogUtils.d("xz","hahaha",true);
+        LogUtils.w("xin","风雨",true);
+        LogUtils.e("zhong","填写");
+        LogUtils.d("----显示时间:" );
+
+
+        try {
+            int a =0;
+            int b = 5/a;
+        } catch (Exception e) {
+//            e.printStackTrace();
+            LogUtils.e(e);
+
+        }
+
+    }
 
 
     private void initAction() {

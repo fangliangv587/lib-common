@@ -68,18 +68,8 @@ public class CrashHandler implements UncaughtExceptionHandler {
      */  
     private boolean handleException(Throwable ex) {
 
-        Writer writer = new StringWriter();
-        PrintWriter printWriter = new PrintWriter(writer);
-        ex.printStackTrace(printWriter);
-        Throwable cause = ex.getCause();
-        while (cause != null) {
-            cause.printStackTrace(printWriter);
-            cause = cause.getCause();
-        }
-        printWriter.close();
-        String result = writer.toString();
-
-        LogUtils.e("CrashHandler","reason:"+result,true);
+        String log = LogUtils.getExceptionLog(ex);
+        LogUtils.e("CrashHandler","异常:"+log,true);
         return true;
     }
 
