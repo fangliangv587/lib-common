@@ -6,7 +6,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.widget.Toast;
+
+import com.cenco.lib.common.log.LogUtils;
 
 import java.io.BufferedInputStream;
 import java.io.Closeable;
@@ -19,6 +22,7 @@ import java.io.InputStream;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -31,11 +35,19 @@ import java.util.Locale;
 
 @SuppressWarnings("unused")
 public class FileUtils {
+
+    /**
+     * 路径常亮
+     */
+    public static class Constant{
+        public static final String root = Environment.getExternalStorageDirectory().getAbsolutePath()+"/";
+        public static final String log_root = root+"log/";
+    }
+
     private FileUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
-    private static String file_root_path ;
     private static final String LINE_SEP = System.getProperty("line.separator");
     private final static String[][] MIME_MapTable = {
             // {后缀名，MIME类型}
@@ -112,7 +124,7 @@ public class FileUtils {
      * @return
      */
     public static String getDefaultLogFilePath(){
-        return Environment.getExternalStorageDirectory().getAbsolutePath()+File.separator+"xz"+File.separator+"lib"+File.separator+"log";
+        return Constant.log_root;
     }
 
 
@@ -854,26 +866,7 @@ public class FileUtils {
         return len == -1 ? "" : byte2FitMemorySize(len);
     }
 
-    /**
-     * 获取文件大小
-     *
-     * @param filePath 文件路径
-     * @return 文件大小
-     */
-    public static String getFileSize(final String filePath) {
-        return getFileSize(getFileByPath(filePath));
-    }
 
-    /**
-     * 获取文件大小
-     *
-     * @param file 文件
-     * @return 文件大小
-     */
-    public static String getFileSize(final File file) {
-        long len = getFileLength(file);
-        return len == -1 ? "" : byte2FitMemorySize(len);
-    }
 
     /**
      * 获取目录长度
@@ -1245,5 +1238,108 @@ public class FileUtils {
                 }
             }
         }
+    }
+
+
+
+    public static final int SIZETYPE_B = 1;//获取文件大小单位为B的double值
+    public static final int SIZETYPE_KB = 2;//获取文件大小单位为KB的double值
+    public static final int SIZETYPE_MB = 3;//获取文件大小单位为MB的double值
+    public static final int SIZETYPE_GB = 4;//获取文件大小单位为GB的double值
+
+    /**
+     * 获取指定文件路径的指定单位的大小
+     * 可以是文件夹的大小
+     * @param filePath 文件路径
+     * @param sizeType 获取大小的类型1为B、2为KB、3为MB、4为GB
+     * @return double值的大小
+     */
+    public static double getFileSize(String filePath, int sizeType) {
+        File file = new File(filePath);
+        long blockSize = 0;
+        try {
+            if (file.isDirectory()) {
+                blockSize = getFolderSize(file);
+            } else {
+                blockSize = getFileSize(file);
+            }
+        } catch (Exception e) {
+            LogUtils.e(e);
+            e.printStackTrace();
+        }
+        return formatFileSize(blockSize, sizeType);
+    }
+
+
+    /**
+     * 获取指定文件大小
+     *
+     * @param file
+     * @return
+     * @throws Exception
+     */
+    private static long getFileSize(File file) throws Exception {
+        long size = -1;
+        if (file.exists()) {
+            FileInputStream fis = null;
+            fis = new FileInputStream(file);
+            size = fis.available();
+            fis.close();
+            return size;
+        }
+
+        Log.e("util","文件不存在!");
+        return size;
+
+    }
+
+    /**
+     * 获取指定文件夹
+     *
+     * @param folder
+     * @return
+     * @throws Exception
+     */
+    private static long getFolderSize(File folder) throws Exception {
+        long size = 0;
+        File flist[] = folder.listFiles();
+        for (int i = 0; i < flist.length; i++) {
+            if (flist[i].isDirectory()) {
+                size = size + getFolderSize(flist[i]);
+            } else {
+                size = size + getFileSize(flist[i]);
+            }
+        }
+        return size;
+    }
+
+
+    /**
+     * 转换文件大小,指定转换的类型
+     *
+     * @param fileSize
+     * @param sizeType
+     * @return
+     */
+    private static double formatFileSize(long fileSize, int sizeType) {
+        DecimalFormat df = new DecimalFormat("#.00");
+        double fileSizeLong = 0;
+        switch (sizeType) {
+            case SIZETYPE_B:
+                fileSizeLong = Double.valueOf(df.format((double) fileSize));
+                break;
+            case SIZETYPE_KB:
+                fileSizeLong = Double.valueOf(df.format((double) fileSize / 1024));
+                break;
+            case SIZETYPE_MB:
+                fileSizeLong = Double.valueOf(df.format((double) fileSize / 1048576));
+                break;
+            case SIZETYPE_GB:
+                fileSizeLong = Double.valueOf(df.format((double) fileSize / 1073741824));
+                break;
+            default:
+                break;
+        }
+        return fileSizeLong;
     }
 }
