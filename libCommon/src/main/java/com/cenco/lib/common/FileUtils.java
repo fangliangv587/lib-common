@@ -41,7 +41,7 @@ public class FileUtils {
      */
     public static class Constant{
         public static final String root = Environment.getExternalStorageDirectory().getAbsolutePath()+"/";
-        public static final String log_root = root+"log/";
+        public static final String log_root = root+"xz/log/";
     }
 
     private FileUtils() {

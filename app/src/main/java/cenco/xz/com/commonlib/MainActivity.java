@@ -85,20 +85,16 @@ public class MainActivity extends BaseActivity {
     private void testLog() {
         LogUtils.v("mmmmmm");
         LogUtils.i("helloworld");
-        LogUtils.d("xz","hahaha",true);
-        LogUtils.w("xin","风雨",true);
+        LogUtils.d("zhang","hahaha");
+        LogUtils.w("xin","风雨");
         LogUtils.e("zhong","填写");
         LogUtils.d("----显示时间:" );
 
 
-        try {
+
             int a =0;
             int b = 5/a;
-        } catch (Exception e) {
-//            e.printStackTrace();
-            LogUtils.e(e);
 
-        }
 
     }
 

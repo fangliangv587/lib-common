@@ -20,7 +20,6 @@ import java.io.Writer;
  * Created by Administrator on 2018/3/5.
  *
  * the default action is that don't save the log to the sdcard ,you can alter the param of save to save all logs{@link # },
- * and also save the log what you want by call the method {@link #i(String, String, boolean)} which contains the params of save.
  * the default save path is define at   {@link FileUtils#getDefaultLogFilePath()}
  * the default global tag is {@link #commontag}
  */
@@ -89,18 +88,20 @@ public class LogUtils {
         return  isInit && debug;
     }
 
-    private static void log(int level,String tag,String mes,boolean save){
+    public static void logs(int level,String mes){
+        logs(level,null,mes);
+    }
+
+    public static void logs(int level,String tag,String mes){
         if (!printLog()){
             return;
         }
-        if (!save){
+        if (level<saveLevel){
             String tag1 = formatTag(tag);
             log(level,tag1,mes);
             return;
         }
-        if (!TextUtils.isEmpty(tag)){
-            Logger.t(tag);
-        }
+
         logger(level,tag,mes);
     }
 
@@ -119,6 +120,7 @@ public class LogUtils {
                 Log.w(tag,mes);
                 break;
             case Level.ERROR:
+            case Level.CRASH:
                 Log.e(tag,mes);
                 break;
             default:
@@ -129,6 +131,11 @@ public class LogUtils {
 
 
     private static void logger(int level,String tag,String mes){
+
+        if (!TextUtils.isEmpty(tag)){
+            Logger.t(tag);
+        }
+
         switch (level){
             case Level.VERBOSE:
                 Logger.v(mes);
@@ -143,6 +150,7 @@ public class LogUtils {
                 Logger.w(mes);
                 break;
             case Level.ERROR:
+            case Level.CRASH:
                 Logger.e(mes);
                 break;
             default:
@@ -151,43 +159,25 @@ public class LogUtils {
         }
     }
 
-    public static void v(String tag,String mes,boolean save){
-        log(Level.VERBOSE,tag,mes,save);
-    }
-    public static void d(String tag,String mes,boolean save){
-        log(Level.DEBUG,tag,mes,save);
-
-    }
-    public static void i(String tag,String mes,boolean save){
-        log(Level.INFO,tag,mes,save);
-    }
-    public static void w(String tag,String mes,boolean save){
-        log(Level.WARN,tag,mes,save);
-    }
-    public static void e(String tag,String mes,boolean save){
-        log(Level.ERROR,tag,mes,save);
-    }
-
-
 
     public static void v(String tag,String mes){
-        v(tag,mes,Level.VERBOSE>=saveLevel);
+        logs(Level.VERBOSE,tag,mes);
     }
     public static void d(String tag,String mes){
-        d(tag,mes,Level.DEBUG>=saveLevel);
+        logs(Level.DEBUG,tag,mes);
     }
     public static void i(String tag,String mes){
-        i(tag,mes,Level.INFO>=saveLevel);
+        logs(Level.INFO,tag,mes);
     }
     public static void w(String tag,String mes){
-        w(tag,mes,Level.WARN>=saveLevel);
+        logs(Level.WARN,tag,mes);
     }
     public static void e(String tag,String mes){
-        e(tag,mes,Level.ERROR>=saveLevel);
+        logs(Level.ERROR,tag,mes);
     }
     public static void e(String tag,Throwable throwable){
         String mes = getExceptionLog(throwable);
-        e(tag,mes,Level.ERROR>=saveLevel);
+        logs(Level.ERROR,tag,mes);
     }
 
 

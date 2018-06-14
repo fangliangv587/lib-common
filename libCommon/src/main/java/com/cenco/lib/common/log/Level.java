@@ -10,5 +10,5 @@ public class Level {
     public static final int INFO = 4;
     public static final int WARN = 5;
     public static final int ERROR = 6;
-    public static final int ASSERT = 7;
+    public static final int CRASH = 7;
 }
