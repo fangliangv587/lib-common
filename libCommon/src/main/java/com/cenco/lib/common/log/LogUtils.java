@@ -27,7 +27,7 @@ import java.io.Writer;
 
 public class LogUtils {
 
-    private  static  String commontag = "libCommon";
+    private  static  String commontag = "commonlib";
     private static boolean isInit = false;
     public static boolean debug = true;
     /*是否全局保存*/
