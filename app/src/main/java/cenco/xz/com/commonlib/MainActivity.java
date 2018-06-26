@@ -92,9 +92,6 @@ public class MainActivity extends BaseActivity {
 
 
 
-            int a =0;
-            int b = 5/a;
-
 
     }
 

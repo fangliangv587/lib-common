@@ -16,6 +16,6 @@ public class App extends Application {
         super.onCreate();
         LogUtils.init("libsample", Level.DEBUG);
 //        LogUtils.save =true;
-        HttpUtil.init(this,false);
+        HttpUtil.init(this,true);
     }
 }

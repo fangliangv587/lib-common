@@ -11,11 +11,13 @@ import com.cenco.lib.common.AssetUtil;
 import com.cenco.lib.common.SystemUtil;
 import com.cenco.lib.common.ThreadManager;
 import com.lzy.okgo.callback.Callback;
+import com.lzy.okgo.model.HttpMethod;
 
 import java.io.File;
 
 import okhttp3.Protocol;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
@@ -103,10 +105,14 @@ public class ApiMock<T> {
         return sparseArray.get(key);
     }
 
-    private Response getRawResponse(String text) {
+    private Request getRawRequest(String url){
         Request.Builder rbuild = new Request.Builder();
-        rbuild.url("http://www.mock.com");
+        rbuild.url(url);
         Request request = rbuild.build();
+        return request;
+    }
+
+    private Response getRawResponse(Request request,String text) {
 
         Response.Builder builder = new Response.Builder();
         builder.body(ResponseBody.create(null,text));
@@ -145,8 +151,9 @@ public class ApiMock<T> {
         public void run() {
 
             SystemUtil.sendMessage(handler,msg_start,null,this.tag);
-
+            final Request request = getRawRequest(url);
             try {
+
                 Thread.sleep(wait_time);
 
                 String urlPath = getUrlPath(url);
@@ -155,14 +162,14 @@ public class ApiMock<T> {
                     throw new IllegalArgumentException("the path is not exist:"+filePath);
                 }
                 String text = AssetUtil.getAssetsFileText(context, filePath);
-                Response rawResponse = getRawResponse(text);
+                Response rawResponse = getRawResponse(request,text);
                 T t = callback.convertResponse(rawResponse);
                 com.lzy.okgo.model.Response<T> response = com.lzy.okgo.model.Response.success(false,t,null,rawResponse);
 
                 SystemUtil.sendMessage(handler,msg_success,response,this.tag);
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
-                Response rawResponse = getRawResponse(throwable.getMessage());
+                Response rawResponse = getRawResponse(request,throwable.getMessage());
                 com.lzy.okgo.model.Response<T> response = com.lzy.okgo.model.Response.error(false,null,rawResponse,throwable);
 
                 SystemUtil.sendMessage(handler,msg_error,response,this.tag);
