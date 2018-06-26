@@ -107,6 +107,9 @@ public class ApiMock<T> {
 
     private Request getRawRequest(String url){
         Request.Builder rbuild = new Request.Builder();
+        if (!url.startsWith("http")){
+            url = "http://www.mock.com/"+url;
+        }
         rbuild.url(url);
         Request request = rbuild.build();
         return request;

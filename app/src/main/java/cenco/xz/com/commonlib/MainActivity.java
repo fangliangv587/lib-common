@@ -304,7 +304,7 @@ public class MainActivity extends BaseActivity {
 
 
     public void jsonClick(View view) {
-        String url =host+"/api/getTaskList";
+        String url ="/api/getTaskList";
         String str = "";
         HttpUtil.postJson(url, str, new SimpleDialogCallback<String>(this) {
             @Override
