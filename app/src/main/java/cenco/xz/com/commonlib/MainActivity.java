@@ -24,6 +24,7 @@ import com.cenco.lib.common.DateUtil;
 import com.cenco.lib.common.FileUtils;
 import com.cenco.lib.common.PermissionManager;
 import com.cenco.lib.common.SPUtil;
+import com.cenco.lib.common.ThreadManager;
 import com.cenco.lib.common.TimerHelper;
 import com.cenco.lib.common.ToastUtil;
 import com.cenco.lib.common.UpdateHelper;
@@ -46,6 +47,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
 
@@ -80,6 +83,11 @@ public class MainActivity extends BaseActivity {
 
 
 
+    }
+
+    private void test(){
+        Type genType = getClass().getGenericSuperclass();
+        Type type = ((ParameterizedType) genType).getActualTypeArguments()[0];
     }
 
     private void testLog() {
@@ -239,6 +247,18 @@ public class MainActivity extends BaseActivity {
         });
     }
 
+    public void getSyncClick(View view) {
+
+        ThreadManager.getPoolProxy().execute(new Runnable() {
+            @Override
+            public void run() {
+                String url =host+"/api/getUserName?id=1";
+                String result = HttpUtil.getSync(url);
+                LogUtils.d("api","sync:"+result);
+            }
+        });
+    }
+
     public void postClick(View view) {
 
         String url =host+"/api/setUserAddress";
@@ -254,6 +274,19 @@ public class MainActivity extends BaseActivity {
             public void onError(String reason) {
                 LogUtils.e("api",reason);
                 ToastUtil.show(mContext,reason);
+            }
+        });
+    }
+
+    public void postSyncClick(View view) {
+        ThreadManager.getPoolProxy().execute(new Runnable() {
+            @Override
+            public void run() {
+                String url =host+"/api/setUserAddress";
+                HttpParams params = new HttpParams();
+                params.put("address","济南市");
+                String result = HttpUtil.postSync(url, params);
+                LogUtils.d("api","sync:"+result);
             }
         });
     }
@@ -354,5 +387,8 @@ public class MainActivity extends BaseActivity {
             }
         });
     }
+
+
+
 }
 

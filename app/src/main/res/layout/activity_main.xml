@@ -118,6 +118,10 @@
                     android:text="get请求" />
                 <Button
                     style="@style/FullViewStyle"
+                    android:onClick="getSyncClick"
+                    android:text="同步get请求" />
+                <Button
+                    style="@style/FullViewStyle"
                     android:onClick="getImageClick"
                     android:text="get请求图片" />
 
@@ -125,6 +129,10 @@
                     style="@style/FullViewStyle"
                     android:onClick="postClick"
                     android:text="post请求" />
+                <Button
+                    style="@style/FullViewStyle"
+                    android:onClick="postSyncClick"
+                    android:text="post同步请求" />
 
                 <Button
                     style="@style/FullViewStyle"

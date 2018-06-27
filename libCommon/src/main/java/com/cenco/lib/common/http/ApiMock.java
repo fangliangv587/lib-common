@@ -10,10 +10,12 @@ import android.util.SparseArray;
 import com.cenco.lib.common.AssetUtil;
 import com.cenco.lib.common.SystemUtil;
 import com.cenco.lib.common.ThreadManager;
+import com.cenco.lib.common.log.LogUtils;
 import com.lzy.okgo.callback.Callback;
 import com.lzy.okgo.model.HttpMethod;
 
 import java.io.File;
+import java.io.IOException;
 
 import okhttp3.Protocol;
 import okhttp3.Request;
@@ -95,6 +97,18 @@ public class ApiMock<T> {
 
     }
 
+
+    public String interruptWeb(String url) {
+        try {
+            Thread.sleep(wait_time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        String text = getContentByUrl(url);
+        return text;
+    }
+
+
     private <T> int addCallback(Callback<T> callback) {
         int tag = number++;
         sparseArray.put(tag,callback);
@@ -138,6 +152,8 @@ public class ApiMock<T> {
     }
 
 
+
+
     class MockRunnable<T> implements Runnable{
 
         private Callback<T> callback;
@@ -158,13 +174,7 @@ public class ApiMock<T> {
             try {
 
                 Thread.sleep(wait_time);
-
-                String urlPath = getUrlPath(url);
-                String filePath = folder + File.separator + urlPath;
-                if (!AssetUtil.isFileExists(context,filePath)){
-                    throw new IllegalArgumentException("the path is not exist:"+filePath);
-                }
-                String text = AssetUtil.getAssetsFileText(context, filePath);
+                String text = getContentByUrl(url);
                 Response rawResponse = getRawResponse(request,text);
                 T t = callback.convertResponse(rawResponse);
                 com.lzy.okgo.model.Response<T> response = com.lzy.okgo.model.Response.success(false,t,null,rawResponse);
@@ -180,5 +190,23 @@ public class ApiMock<T> {
 
             SystemUtil.sendMessage(handler,msg_finish,null,this.tag);
         }
+
+
+    }
+
+
+    private String getContentByUrl(String url) {
+        try {
+            String urlPath = getUrlPath(url);
+            String filePath = folder + File.separator + urlPath;
+            if (!AssetUtil.isFileExists(context,filePath)){
+                throw new IllegalArgumentException("the path is not exist:"+filePath);
+            }
+            return AssetUtil.getAssetsFileText(context, filePath);
+        } catch (IOException e) {
+            LogUtils.e("util",e);
+            e.printStackTrace();
+        }
+        return null;
     }
 }
