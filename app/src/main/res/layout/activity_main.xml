@@ -49,8 +49,8 @@
 
                 <Button
                     style="@style/FullViewStyle"
-                    android:onClick="updateClick"
-                    android:text="升级" />
+                    android:onClick="timerClick"
+                    android:text="计时器" />
 
 
 

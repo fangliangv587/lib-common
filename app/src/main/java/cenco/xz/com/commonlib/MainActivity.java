@@ -56,7 +56,7 @@ import cenco.xz.com.commonlib.bean.Result;
 import cenco.xz.com.commonlib.bean.Task;
 import cenco.xz.com.commonlib.bean.User;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements TimerHelper.TimerListener {
 
     private ImageView watermarkImageView;
     private ImageView infoImageView;
@@ -67,6 +67,8 @@ public class MainActivity extends BaseActivity {
     private String token;
 
     String path;
+
+    TimerHelper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,19 +110,6 @@ public class MainActivity extends BaseActivity {
 
         path = Environment.getExternalStorageDirectory().getAbsolutePath()+ File.separator+"xz"+File.separator+"image";
         AssetUtil.copyFiles(this,"watermark",path);
-
-        TimerHelper helper = new TimerHelper(new TimerHelper.TimerListener() {
-            @Override
-            public void onTimerRunning(int current, int total,boolean isOver) {
-//                LogUtils.d("onTimerRunning:"+current+"/"+ total);
-                if (isOver){
-                    LogUtils.i("onTimerRunning结束");
-                }
-            }
-        });
-        helper.setInterval(1);
-//        helper.setTotalSecond(10);
-        helper.start();
 
     }
 
@@ -175,11 +164,18 @@ public class MainActivity extends BaseActivity {
        int b= 5/a;
     }
 
-    /**************************************升级***************************************************/
-    public void updateClick(View view) {
-        String checkUrl = "http://kuaifa.tv/updateversion/abt_version.json";
-        UpdateHelper helper = new UpdateHelper(checkUrl);
-        helper.checkVersion();
+    /**************************************计时器***************************************************/
+    public void timerClick(View view) {
+        if (helper==null){
+            helper = new TimerHelper(this);
+        }
+
+        if (helper.isRunning()){
+            helper.stop();
+        }else {
+            helper.start();
+        }
+
     }
     /**************************************打水印***************************************************/
 
@@ -389,6 +385,19 @@ public class MainActivity extends BaseActivity {
     }
 
 
+    @Override
+    public void onTimerRunning(int current, int total, boolean isOver) {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (helper!=null){
+            helper.stop();
+        }
+
+        super.onDestroy();
+
+    }
 }
 

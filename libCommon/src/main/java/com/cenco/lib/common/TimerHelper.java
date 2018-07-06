@@ -15,9 +15,9 @@ public class TimerHelper {
     //时间间隔 单位秒
     private int interval = 1;
 
-    private static final String tag = TimerHelper.class.getName();
+    private static final String TAG = TimerHelper.class.getName();
 
-
+    private boolean isRunning = false;
 
     //计算消耗的总时间,单位s
     private int timer;
@@ -27,51 +27,6 @@ public class TimerHelper {
 
     private List<TimerListener> listeners = new ArrayList<>();
 
-    private Handler handler = new Handler();
-
-    private Runnable runnable = new Runnable() {
-
-        @Override
-        public void run() {
-            // TODO Auto-generated method stub
-
-            timer = timer + interval;
-            //****************无限计时器****************
-            if (totalSecond <= 0) {
-                handler.postDelayed(this, interval * 1000);
-                LogUtils.v("util",name + "(" + TimerHelper.this.hashCode() + ")进行中:" + timer + "/" + totalSecond + "(MAX),thread:" + Thread.currentThread().getName());
-                if (listeners .size() != 0) {
-                    for (TimerListener listener :listeners ){
-                        listener.onTimerRunning(timer, totalSecond,false);
-                    }
-                }
-                return;
-            }
-
-
-            //****************倒计时计时器****************
-            boolean isOver = false;
-            if (timer >= totalSecond) {
-                isOver = true;
-                handler.removeCallbacks(runnable);
-                LogUtils.v("util",name + "(" + TimerHelper.this.hashCode() + "):结束" + timer + "/" + totalSecond + ",thread:" + Thread.currentThread().getName());
-            } else {
-                handler.postDelayed(this, interval * 1000);
-                LogUtils.v("util",name + "(" + TimerHelper.this.hashCode() + ")进行中:" + timer + "/" + totalSecond + ",thread:" + Thread.currentThread().getName());
-
-            }
-
-            if (listeners .size() != 0) {
-                for (TimerListener listener :listeners ){
-                    listener.onTimerRunning(timer, totalSecond,isOver);
-                }
-            }
-
-
-        }
-
-
-    };
 
 
     public TimerHelper(int totalSecond, TimerListener listener) {
@@ -101,15 +56,66 @@ public class TimerHelper {
     }
 
 
+    public boolean isRunning() {
+        return isRunning;
+    }
+
     /**
      * 启动计时器
      */
     public void start() {
 
-        stop();
-
+        isRunning = true;
         timer = 0;
-        handler.postDelayed(runnable, interval * 1000);
+
+        ThreadManager.getPoolProxy().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                while (isRunning){
+
+                    try {
+                        Thread.sleep(interval * 1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (!isRunning){
+                        return;
+                    }
+
+                    timer = timer + interval;
+                    //****************无限计时器****************
+                    if (totalSecond <= 0) {
+                        LogUtils.v("util",name + "(" + TimerHelper.this.hashCode() + ")进行中:" + timer + "/" + totalSecond + "(MAX),thread:" + Thread.currentThread().getName());
+                        if (listeners .size() != 0) {
+                            for (TimerListener listener :listeners ){
+                                listener.onTimerRunning(timer, totalSecond,false);
+                            }
+                        }
+                    }else{
+                        //****************倒计时计时器****************
+                        boolean isOver = false;
+                        if (timer >= totalSecond) {
+                            isOver = true;
+                            LogUtils.v("util",name + "(" + TimerHelper.this.hashCode() + "):结束" + timer + "/" + totalSecond + ",thread:" + Thread.currentThread().getName());
+                        } else {
+                            LogUtils.v("util",name + "(" + TimerHelper.this.hashCode() + ")进行中:" + timer + "/" + totalSecond + ",thread:" + Thread.currentThread().getName());
+                        }
+
+                        if (listeners .size() != 0) {
+                            for (TimerListener listener :listeners ){
+                                listener.onTimerRunning(timer, totalSecond,isOver);
+                            }
+                        }
+                    }
+
+
+
+                }
+            }
+        });
+
     }
 
 
@@ -118,8 +124,8 @@ public class TimerHelper {
      */
     public void stop() {
 
-        handler.removeCallbacks(runnable);
-        LogUtils.v("util",name + "(" + TimerHelper.this.hashCode() + "):被中止 " + timer + "/" + totalSecond + ",thread:" + Thread.currentThread().getName());
+        isRunning = false;
+        LogUtils.v("util",name + "(" + this.hashCode() + "):被中止 " + timer + "/" + totalSecond + ",thread:" + Thread.currentThread().getName());
 
     }
 
