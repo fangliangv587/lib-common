@@ -2,6 +2,7 @@ package com.cenco.lib.common.http;
 
 import android.app.Application;
 
+import com.cenco.lib.common.ToastUtil;
 import com.cenco.lib.common.json.GsonUtil;
 import com.cenco.lib.common.log.LogUtils;
 import com.lzy.okgo.OkGo;
@@ -31,6 +32,8 @@ import okhttp3.Response;
  */
 
 public class HttpUtil {
+
+    public static final String TAG = HttpUtil.class.getSimpleName();
 
     //初始化
     private static boolean isInit = false;
@@ -198,10 +201,12 @@ public class HttpUtil {
         }
         String body = null;
         try {
+            LogUtils.w(TAG,"get url="+url);
             Response response = OkGo.get(url).execute();
             body = response.body().string();
+            LogUtils.d(TAG,"get sync response ===> "+body);
         } catch (IOException e) {
-            LogUtils.e("util",e);
+            LogUtils.e(TAG,e);
             e.printStackTrace();
         }
 
@@ -239,11 +244,14 @@ public class HttpUtil {
             return result;
         }
         try {
+            LogUtils.w(TAG,"post url="+url);
+            LogUtils.i(TAG,getPostParams(params));
             Response response = OkGo.post(url).params(params).execute();
             String body = response.body().string();
+            LogUtils.d(TAG,"post sync response ===> "+body);
             return body;
         } catch (IOException e) {
-            LogUtils.e("util",e);
+            LogUtils.e(TAG,e);
             e.printStackTrace();
         }
 
@@ -308,6 +316,25 @@ public class HttpUtil {
             url += param;
         }
         return url;
+    }
+
+
+    /**
+     * 获取post请求参数
+     * @param params
+     * @return
+     */
+    public static String getPostParams(HttpParams params){
+        if (params != null) {
+
+            StringBuilder result = new StringBuilder();
+            for (ConcurrentHashMap.Entry<String, List<String>> entry : params.urlParamsMap.entrySet()) {
+                result.append(entry.getKey()).append(":").append(entry.getValue().get(0)).append("\n");
+            }
+
+           return result.toString();
+        }
+        return "";
     }
 
 

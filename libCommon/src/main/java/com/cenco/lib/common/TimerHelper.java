@@ -10,17 +10,20 @@ import java.util.List;
 
 public class TimerHelper {
 
+    private static final String TAG = SystemUtil.class.getSimpleName();
+
     //倒计时的最大值
     private int totalSecond;
     //时间间隔 单位秒
     private int interval = 1;
 
-    private static final String TAG = TimerHelper.class.getName();
 
     private boolean isRunning = false;
 
     //计算消耗的总时间,单位s
     private int timer;
+
+    private boolean showLog = true;
 
     //计时器名称
     private String name = "计时器";
@@ -34,6 +37,10 @@ public class TimerHelper {
         this.totalSecond = totalSecond;
         listeners.add(listener);
 
+    }
+
+    public void setShowLog(boolean showLog) {
+        this.showLog = showLog;
     }
 
     public TimerHelper(TimerListener listener) {
@@ -87,7 +94,9 @@ public class TimerHelper {
                     timer = timer + interval;
                     //****************无限计时器****************
                     if (totalSecond <= 0) {
-                        LogUtils.v("util",name + "(" + TimerHelper.this.hashCode() + ")进行中:" + timer + "/" + totalSecond + "(MAX),thread:" + Thread.currentThread().getName());
+                        if (showLog){
+                            LogUtils.v(TAG,name + "(" + TimerHelper.this.hashCode() + ")进行中:" + timer + "/" + totalSecond + "(MAX),thread:" + Thread.currentThread().getName());
+                        }
                         if (listeners .size() != 0) {
                             for (TimerListener listener :listeners ){
                                 listener.onTimerRunning(timer, totalSecond,false);
@@ -98,9 +107,13 @@ public class TimerHelper {
                         boolean isOver = false;
                         if (timer >= totalSecond) {
                             isOver = true;
-                            LogUtils.v("util",name + "(" + TimerHelper.this.hashCode() + "):结束" + timer + "/" + totalSecond + ",thread:" + Thread.currentThread().getName());
+                            if (showLog){
+                                LogUtils.v(TAG,name + "(" + TimerHelper.this.hashCode() + "):结束" + timer + "/" + totalSecond + ",thread:" + Thread.currentThread().getName());
+                            }
                         } else {
-                            LogUtils.v("util",name + "(" + TimerHelper.this.hashCode() + ")进行中:" + timer + "/" + totalSecond + ",thread:" + Thread.currentThread().getName());
+                            if (showLog){
+                                LogUtils.v(TAG,name + "(" + TimerHelper.this.hashCode() + ")进行中:" + timer + "/" + totalSecond + ",thread:" + Thread.currentThread().getName());
+                            }
                         }
 
                         if (listeners .size() != 0) {
@@ -125,7 +138,7 @@ public class TimerHelper {
     public void stop() {
 
         isRunning = false;
-        LogUtils.v("util",name + "(" + this.hashCode() + "):被中止 " + timer + "/" + totalSecond + ",thread:" + Thread.currentThread().getName());
+        LogUtils.v(TAG,name + "(" + this.hashCode() + "):被中止 " + timer + "/" + totalSecond + ",thread:" + Thread.currentThread().getName());
 
     }
 

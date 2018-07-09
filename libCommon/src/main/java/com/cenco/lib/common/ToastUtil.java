@@ -5,6 +5,8 @@ import android.widget.Toast;
 
 public class ToastUtil {
 
+	private static final String TAG = ToastUtil.class.getSimpleName();
+
 	public static void show(Context context,String text,boolean isLong){
 		int duration = isLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT;
 		Toast.makeText(context, text, duration).show();

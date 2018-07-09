@@ -27,6 +27,9 @@ import java.util.List;
  */
 
 public class IOUtils {
+
+    private static final String TAG = IOUtils.class.getSimpleName();
+
     private IOUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }

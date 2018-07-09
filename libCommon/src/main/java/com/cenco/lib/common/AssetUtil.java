@@ -17,7 +17,7 @@ import java.io.InputStream;
 
 public class AssetUtil {
 
-
+    private static final String TAG = AssetUtil.class.getSimpleName();
     /**
      * 判断assets文件夹下的文件是否存在
      *

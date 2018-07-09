@@ -22,6 +22,8 @@ import java.util.List;
 
 public class PermissionManager {
 
+    private static final String TAG = PermissionManager.class.getSimpleName();
+
     public static final int REQUEST_LOCATION_PERMISSION = 0x0001;
 
     private Rationale mRationale;

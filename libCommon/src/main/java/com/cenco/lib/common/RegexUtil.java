@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RegexUtil {
-
+	private static final String TAG = RegexUtil.class.getSimpleName();
 	/**
 	 * 是否是身份证
 	 * @param text

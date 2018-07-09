@@ -37,6 +37,9 @@ import okhttp3.Response;
  */
 public abstract class JsonCallback<T> extends AbsCallback<T> {
 
+
+    private static final String TAG =HttpUtil.TAG;
+    
     private Type type;
     private Class<T> clazz;
 
@@ -63,14 +66,16 @@ public abstract class JsonCallback<T> extends AbsCallback<T> {
         //                .params("params1", "ParamsValue1")//
         //                .params("token", "3215sdf13ad1f65asd4f3ads1f");
 
-        LogUtils.v("util","onStart = = = = = = = = >>>\r\n"+( request == null ? "" : request.getUrl()) );
+        LogUtils.v(TAG,"onStart = = = = = = = = >>>\r\n"+( request == null ? "" : request.getUrl()+"\r\n"+HttpUtil.getPostParams(request.getParams())) );
+
+
 
     }
 
     @Override
     public void onError(com.lzy.okgo.model.Response<T> response) {
         super.onError(response);
-        LogUtils.e("util","onError = = = = = = = = >>>\r\n"+response.getException().getMessage());
+        LogUtils.e(TAG,"onError = = = = = = = = >>>\r\n"+response.getException().getMessage());
     }
 
     /**

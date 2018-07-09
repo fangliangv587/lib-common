@@ -35,7 +35,7 @@ import java.util.Locale;
 
 @SuppressWarnings("unused")
 public class FileUtils {
-
+    private static final String TAG = FileUtils.class.getSimpleName();
     /**
      * 路径常亮
      */
@@ -1288,7 +1288,7 @@ public class FileUtils {
             return size;
         }
 
-        Log.e("util","文件不存在!");
+        Log.e(TAG,"文件不存在!");
         return size;
 
     }

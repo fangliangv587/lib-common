@@ -28,6 +28,8 @@ import java.io.IOException;
 
 public class BitmapUtil {
 
+    private static final String TAG = BitmapUtil.class.getSimpleName();
+
     public static Bitmap getWatermarkBitmap(Context context,Bitmap bitmap,String mark){
         return getWatermarkBitmap(context,bitmap,mark,null);
     }

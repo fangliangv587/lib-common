@@ -21,6 +21,8 @@ import java.util.Map;
 
 public class SPUtil {
 
+    private static final String TAG = SPUtil.class.getSimpleName();
+
     public static final String FILE_NAME = "share_data";
 
     public static void put(Context context, String key, Object object) {

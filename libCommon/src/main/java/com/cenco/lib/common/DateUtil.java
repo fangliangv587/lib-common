@@ -10,6 +10,8 @@ import com.cenco.lib.common.log.LogUtils;
 
 public class DateUtil {
 
+    private static final String TAG = DateUtil.class.getSimpleName();
+
 	public static final String FORMAT_YMDHMS = "yyyy-MM-dd HH:mm:ss";
 	public static final String FORMAT_YMD = "yyyy-MM-dd";
 	public static final String FORMAT_YMD1 = "yyyy年MM月dd日";

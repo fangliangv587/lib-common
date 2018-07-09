@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide;
  */
 
 public class ImageUtil {
-
+    private static final String TAG = ImageUtil.class.getSimpleName();
     public static void loadImage(Context context,String path, ImageView imageView){
         Glide.with(context)
                 .load(path)

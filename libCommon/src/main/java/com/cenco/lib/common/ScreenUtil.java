@@ -7,6 +7,8 @@ import android.view.WindowManager;
 
 public class ScreenUtil {
 
+	private static final String TAG = ScreenUtil.class.getSimpleName();
+
 	private static int screenWidth = 0;
 	private static int screenHeight = 0;
 	private static int screenDensityDpi = 0;

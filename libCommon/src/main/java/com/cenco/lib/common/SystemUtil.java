@@ -36,6 +36,7 @@ import java.util.List;
 
 public class SystemUtil {
 
+	private static final String TAG = SystemUtil.class.getSimpleName();
 
 	/**
 	 * 获取mac
