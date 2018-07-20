@@ -10,7 +10,7 @@ import java.util.List;
 
 public class TimerHelper {
 
-    private static final String TAG = SystemUtil.class.getSimpleName();
+    private static final String TAG = TimerHelper.class.getSimpleName();
 
     //倒计时的最大值
     private int totalSecond;
@@ -35,7 +35,9 @@ public class TimerHelper {
     public TimerHelper(int totalSecond, TimerListener listener) {
         super();
         this.totalSecond = totalSecond;
-        listeners.add(listener);
+        if (listener!=null){
+            listeners.add(listener);
+        }
 
     }
 
@@ -144,6 +146,9 @@ public class TimerHelper {
 
 
     public void addListener(TimerListener listener){
+        if (listener==null){
+            return;
+        }
         listeners.add(listener);
     }
 

@@ -34,6 +34,7 @@ import com.cenco.lib.common.http.SimpleCallback;
 import com.cenco.lib.common.http.SimpleDialogCallback;
 import com.cenco.lib.common.json.GsonUtil;
 import com.cenco.lib.common.log.LogUtils;
+import com.cenco.lib.common.system.MacUtil;
 import com.lzy.okgo.callback.BitmapCallback;
 import com.lzy.okgo.callback.Callback;
 import com.lzy.okgo.callback.FileCallback;
@@ -84,6 +85,8 @@ public class MainActivity extends BaseActivity implements TimerHelper.TimerListe
         initAction();
 
 
+        String mac = MacUtil.getMac(this);
+        LogUtils.d(mac);
 
     }
 

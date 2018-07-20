@@ -369,6 +369,37 @@ public class BitmapUtil {
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
 
+    public static String getBase64(Bitmap bitmap){
+        if (bitmap==null){
+            return null;
+        }
+
+        ByteArrayOutputStream out = null;
+
+        try {
+            out = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+
+            out.flush();
+            out.close();
+            byte[] imgBytes = out.toByteArray();
+            bitmap.recycle();
+            return Base64.encodeToString(imgBytes, Base64.DEFAULT);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            try {
+                out.flush();
+                out.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                LogUtils.e(e.getMessage());
+            }
+        }
+    }
+
     /**
      * 图片文件路径转base64
      *
@@ -383,34 +414,8 @@ public class BitmapUtil {
         }
 
         Bitmap bitmap = getBitmap(imgPath);
-        if (bitmap == null) {
-            LogUtils.w("bitmap not found");
-            return null;
-        }
-        ByteArrayOutputStream out = null;
-        try {
-            out = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
 
-            out.flush();
-            out.close();
-            byte[] imgBytes = out.toByteArray();
-            bitmap.recycle();
-            return Base64.encodeToString(imgBytes, Base64.DEFAULT);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            LogUtils.e(e.getMessage());
-            return null;
-        } finally {
-            try {
-                out.flush();
-                out.close();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-                LogUtils.e(e.getMessage());
-            }
-        }
+        return getBase64(bitmap);
     }
 
     /**

@@ -201,7 +201,7 @@ public class HttpUtil {
         }
         String body = null;
         try {
-            LogUtils.w(TAG,"get url="+url);
+            LogUtils.i(TAG,"get url="+url);
             Response response = OkGo.get(url).execute();
             body = response.body().string();
             LogUtils.d(TAG,"get sync response ===> "+body);
@@ -244,8 +244,8 @@ public class HttpUtil {
             return result;
         }
         try {
-            LogUtils.w(TAG,"post url="+url);
-            LogUtils.i(TAG,getPostParams(params));
+            LogUtils.i(TAG,"post url="+url);
+            LogUtils.v(TAG,getPostParams(params));
             Response response = OkGo.post(url).params(params).execute();
             String body = response.body().string();
             LogUtils.d(TAG,"post sync response ===> "+body);

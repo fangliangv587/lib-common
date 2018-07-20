@@ -32,6 +32,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.net.NetworkInterface;
+import java.util.Enumeration;
 import java.util.List;
 
 public class SystemUtil {
@@ -54,6 +56,34 @@ public class SystemUtil {
 		}
 		return  str;
 	}
+
+
+	private static String getMacAddress() {
+		String address = null;
+		try {
+			Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+			while (interfaces.hasMoreElements()) {
+				NetworkInterface netWork = interfaces.nextElement();
+				if (netWork != null && netWork.getName().equals("wlan0")) {
+					byte[] by = netWork.getHardwareAddress();
+					if (by != null && by.length > 0) {
+						StringBuilder builder = new StringBuilder();
+						for (byte b : by) {
+							builder.append(String.format("%02X:", b));
+						}
+						if (builder.length() > 0) {
+							builder.deleteCharAt(builder.length() - 1);
+							address = builder.toString();
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+		}
+
+		return address;
+	}
+
 
 	/**
 	 * 这是使用adb shell命令来获取mac地址的方式
