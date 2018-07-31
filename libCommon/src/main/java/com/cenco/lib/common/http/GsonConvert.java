@@ -44,6 +44,8 @@ public class GsonConvert<T> implements Converter<T> {
     private Type type;
     private Class<T> clazz;
 
+    private static final String TAG =HttpUtil.TAG;
+
     public GsonConvert() {
     }
 
@@ -79,7 +81,7 @@ public class GsonConvert<T> implements Converter<T> {
         String text = body.string();
 
 
-        LogUtils.v("util","onResponse = = = = = = = = >>>\r\n"+response.request().toString()+",\r\nResponse:"+text);
+        LogUtils.d(TAG,"onResponse = = = = = = = = >>>\r\n"+response.request().toString()+",\r\nResponse:"+text);
 
         if (type == null) {
             if (clazz == null) {

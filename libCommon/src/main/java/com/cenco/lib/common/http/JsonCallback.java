@@ -66,7 +66,7 @@ public abstract class JsonCallback<T> extends AbsCallback<T> {
         //                .params("params1", "ParamsValue1")//
         //                .params("token", "3215sdf13ad1f65asd4f3ads1f");
 
-        LogUtils.v(TAG,"onStart = = = = = = = = >>>\r\n"+( request == null ? "" : request.getUrl()+"\r\n"+HttpUtil.getPostParams(request.getParams())) );
+        LogUtils.d(TAG,"onStart = = = = = = = = >>>\r\n"+( request == null ? "" : request.getUrl()+"\r\n"+HttpUtil.getPostParams(request.getParams())) );
 
 
 
