@@ -29,53 +29,64 @@ public class MacUtil {
     private static final String TAG = MacUtil.class.getSimpleName();
 
 
-
     public static String getMac(Context context) {
+
+//        return "ec:3d:fd:7a:16:42";
+//        return "ec:3d:fd:7d:70:e8";
+//        return "EC:3D:FD:7B:69:FF";
+//        return "10:a4:be:7d:81:54";
 
         String strMac = null;
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            LogUtils.d(TAG, "6.0以下");
+            LogUtils.v(TAG, "6.0以下");
             strMac = getLocalMacAddressFromWifiInfo(context);
-            return strMac;
+
         } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N
                 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            LogUtils.d(TAG,  "6.0以上7.0以下");
+            LogUtils.v(TAG, "6.0以上7.0以下");
             strMac = getMacAddress(context);
-            return strMac;
+
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            LogUtils.i(TAG,  "7.0以上");
+            LogUtils.v(TAG, "7.0以上");
             String macAddress = getMacAddress();
             if (!TextUtils.isEmpty(macAddress)) {
-                LogUtils.d(TAG,  "7.0以上1");
-                return macAddress;
-            }
-            macAddress=getMachineHardwareAddress();
-            if (!TextUtils.isEmpty(macAddress)) {
-                LogUtils.d(TAG,  "7.0以上2");
-                return macAddress;
+                LogUtils.d(TAG, "7.0以上1");
+                strMac = macAddress;
             } else {
-                LogUtils.d(TAG,  "7.0以上3");
-                strMac = getLocalMacAddressFromBusybox();
-                return strMac;
+                macAddress = getMachineHardwareAddress();
+                if (!TextUtils.isEmpty(macAddress)) {
+                    LogUtils.v(TAG, "7.0以上2");
+                    strMac = macAddress;
+                } else {
+                    LogUtils.v(TAG, "7.0以上3");
+                    strMac = getLocalMacAddressFromBusybox();
+
+                }
             }
+
         }
 
-        return "02:00:00:00:00:00";
+        if (strMac == null) {
+            return "";
+        }
+        LogUtils.d("mac:"+strMac);
+        return strMac;
+
 
     }
 
 
-
     /**
      * 根据wifi信息获取本地mac
+     *
      * @param context
      * @return
      */
-    private static String getLocalMacAddressFromWifiInfo(Context context){
+    private static String getLocalMacAddressFromWifiInfo(Context context) {
         WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         WifiInfo winfo = wifi.getConnectionInfo();
-        String mac =  winfo.getMacAddress();
+        String mac = winfo.getMacAddress();
         return mac;
     }
 
@@ -151,7 +162,7 @@ public class MacUtil {
     private static boolean isAccessWifiStateAuthorized(Context context) {
         if (PackageManager.PERMISSION_GRANTED == context
                 .checkCallingOrSelfPermission("android.permission.ACCESS_WIFI_STATE")) {
-            LogUtils.d(TAG,"isAccessWifiStateAuthorized:"
+            LogUtils.d(TAG, "isAccessWifiStateAuthorized:"
                     + "access wifi state is enabled");
             return true;
         } else
@@ -202,6 +213,7 @@ public class MacUtil {
         }
         return strMacAddr;
     }
+
     /**
      * 获取移动设备本地IP
      *

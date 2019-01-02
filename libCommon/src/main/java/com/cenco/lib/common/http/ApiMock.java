@@ -41,7 +41,7 @@ public class ApiMock<T> {
     private static final int msg_finish = 0x0004;
 
     //mock等待时间
-    private static final int wait_time = 1*1000;
+    private static final int wait_time = 2*1000;
 
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler(){
@@ -129,7 +129,7 @@ public class ApiMock<T> {
         return request;
     }
 
-    private Response getRawResponse(Request request,String text) {
+    public static Response getRawResponse(Request request,String text) {
 
         Response.Builder builder = new Response.Builder();
         builder.body(ResponseBody.create(null,text));
@@ -200,7 +200,7 @@ public class ApiMock<T> {
             String urlPath = getUrlPath(url);
             String filePath = folder + File.separator + urlPath;
             if (!AssetUtil.isFileExists(context,filePath)){
-                throw new IllegalArgumentException("the path is not exist:"+filePath);
+                return "the path is not exist:"+filePath;
             }
             return AssetUtil.getAssetsFileText(context, filePath);
         } catch (IOException e) {

@@ -25,7 +25,7 @@ public class UpdateHelper<T> {
         if (TextUtils.isEmpty(checkUrl)){
             return;
         }
-        HttpUtil.get(this.checkUrl, new SimpleCallback<T>() {
+        HttpUtil.get(this,this.checkUrl, new SimpleCallback<T>() {
             @Override
             public void onSuccess(T t) {
 

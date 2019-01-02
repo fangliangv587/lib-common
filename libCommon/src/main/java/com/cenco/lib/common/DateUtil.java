@@ -13,6 +13,7 @@ public class DateUtil {
     private static final String TAG = DateUtil.class.getSimpleName();
 
 	public static final String FORMAT_YMDHMS = "yyyy-MM-dd HH:mm:ss";
+	public static final String FORMAT_YMDHMS1 = "yyyyMMddHHmmss";
 	public static final String FORMAT_YMD = "yyyy-MM-dd";
 	public static final String FORMAT_YMD1 = "yyyy年MM月dd日";
 	public static final String FORMAT_MD1 = "MM-dd";
@@ -80,6 +81,18 @@ public class DateUtil {
 	public static String getDateString() {
 		return getDateString(FORMAT_YMDHMS);
 	}
+
+	public static String getDateString(long time,String format){
+        Date date = new Date();
+        date.setTime(time);
+        return getDateString(date,format);
+    }
+
+    public static String getDateString(long time){
+        Date date = new Date();
+        date.setTime(time);
+        return getDateString(date,FORMAT_YMDHMS);
+    }
 
 	public static Date getDate(String str,String format){
 	    if (str == null || format == null){

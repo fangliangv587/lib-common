@@ -150,7 +150,7 @@ public class MainActivity extends BaseActivity implements TimerHelper.TimerListe
     /**************************************媒体助手***************************************************/
     public void taskListClickRecieved(View view) {
         String url ="http://devapi.kuaifa.tv/mediaAide/v1/task/getTaskListIng";
-        HttpUtil.get(url, new SimpleDialogCallback<String>(this) {
+        HttpUtil.get(null,url, new SimpleDialogCallback<String>(this) {
             @Override
             public void onSuccess(String s) {
                 LogUtils.d("api",s.toString());
@@ -232,7 +232,7 @@ public class MainActivity extends BaseActivity implements TimerHelper.TimerListe
     String host = "http://192.168.0.110:3000";
     public void getClick(View view) {
         String url =host+"/api/getUserName?id=1";
-        HttpUtil.get(url, new SimpleDialogCallback<Result<User>>(this) {
+        HttpUtil.get(null,url, new SimpleDialogCallback<Result<User>>(this) {
             @Override
             public void onSuccess(Result<User> s) {
                 LogUtils.d("api",s.getData().toString());
@@ -263,7 +263,7 @@ public class MainActivity extends BaseActivity implements TimerHelper.TimerListe
         String url =host+"/api/setUserAddress";
         HttpParams params = new HttpParams();
         params.put("address","济南市");
-        HttpUtil.post(url, params, new SimpleDialogCallback<Result<String>>(this) {
+        HttpUtil.post(null,url, params, new SimpleDialogCallback<Result<String>>(this) {
             @Override
             public void onSuccess(Result<String> s) {
                 LogUtils.d("api",s.toString());
@@ -300,7 +300,7 @@ public class MainActivity extends BaseActivity implements TimerHelper.TimerListe
         }
         HttpParams params = new HttpParams();
         params.put("imageFile",file);
-        HttpUtil.post(url, params, new SimpleDialogCallback<Result<String>>(this) {
+        HttpUtil.post(null,url, params, new SimpleDialogCallback<Result<String>>(this) {
             @Override
             public void onSuccess(Result<String> s) {
                 LogUtils.d("api",s.toString());
@@ -319,7 +319,7 @@ public class MainActivity extends BaseActivity implements TimerHelper.TimerListe
         String url =host+"/api/getTaskList";
         HttpParams params = new HttpParams();
         params.put("address","济南市");
-        HttpUtil.post(url, params, new SimpleDialogCallback<Result<List<Task>>>(this) {
+        HttpUtil.post(null,url, params, new SimpleDialogCallback<Result<List<Task>>>(this) {
             @Override
             public void onSuccess(Result<List<Task>> s) {
                 LogUtils.d("api",s.toString());
@@ -355,7 +355,7 @@ public class MainActivity extends BaseActivity implements TimerHelper.TimerListe
 
     public void getImageClick(View view) {
         String url = "http://www.ybol.vip/CheckCode?flag=3";
-        HttpUtil.get(url, new BitmapCallback() {
+        HttpUtil.get(null,url, new BitmapCallback() {
             @Override
             public void onSuccess(Response<Bitmap> response) {
                 Bitmap body = response.body();

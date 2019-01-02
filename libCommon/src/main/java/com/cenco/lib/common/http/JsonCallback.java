@@ -66,11 +66,13 @@ public abstract class JsonCallback<T> extends AbsCallback<T> {
         //                .params("params1", "ParamsValue1")//
         //                .params("token", "3215sdf13ad1f65asd4f3ads1f");
 
-        LogUtils.d(TAG,"onStart = = = = = = = = >>>\r\n"+( request == null ? "" : request.getUrl()+"\r\n"+HttpUtil.getPostParams(request.getParams())) );
+        LogUtils.d(TAG,"onStart = = = = = = = = >>>\r\n"+( request == null ? "" : request.getUrl()+"\r\n参数\r\n"+HttpUtil.getPostParams(request.getParams())) );
 
 
 
     }
+
+
 
     @Override
     public void onError(com.lzy.okgo.model.Response<T> response) {
@@ -84,7 +86,7 @@ public abstract class JsonCallback<T> extends AbsCallback<T> {
      * 这里的解析工作不同的业务逻辑基本都不一样,所以需要自己实现,以下给出的时模板代码,实际使用根据需要修改
      */
     @Override
-    public T convertResponse(Response response) throws Throwable {
+    public T convertResponse(Response response)  {
 
         // 重要的事情说三遍，不同的业务，这里的代码逻辑都不一样，如果你不修改，那么基本不可用
         // 重要的事情说三遍，不同的业务，这里的代码逻辑都不一样，如果你不修改，那么基本不可用
@@ -92,17 +94,24 @@ public abstract class JsonCallback<T> extends AbsCallback<T> {
 
         //详细自定义的原理和文档，看这里： https://github.com/jeasonlzy/okhttp-OkGo/wiki/JsonCallback
 
-        if (type == null) {
-            if (clazz == null) {
-                Type genType = getClass().getGenericSuperclass();
-                type = ((ParameterizedType) genType).getActualTypeArguments()[0];
-            } else {
-                GsonConvert<T> convert = new GsonConvert<>(clazz);
-                return convert.convertResponse(response);
+        try {
+            if (type == null) {
+                if (clazz == null) {
+                    Type genType = getClass().getGenericSuperclass();
+                    type = ((ParameterizedType) genType).getActualTypeArguments()[0];
+                } else {
+                    GsonConvert<T> convert = new GsonConvert<>(clazz);
+                    return convert.convertResponse(response);
+                }
             }
-        }
 
-        GsonConvert<T> convert = new GsonConvert<>(type);
-        return convert.convertResponse(response);
+            GsonConvert<T> convert = new GsonConvert<>(type);
+            return convert.convertResponse(response);
+        } catch (Throwable throwable) {
+            String url =response.request().url().toString();
+            String exceptionLog = LogUtils.getExceptionLog(throwable);
+            LogUtils.e(TAG,"url:"+url+"\r\n"+exceptionLog);
+        }
+        return null;
     }
 }

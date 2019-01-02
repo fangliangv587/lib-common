@@ -30,17 +30,18 @@ public class BitmapUtil {
 
     private static final String TAG = BitmapUtil.class.getSimpleName();
 
-    public static Bitmap getWatermarkBitmap(Context context,Bitmap bitmap,String mark){
-        return getWatermarkBitmap(context,bitmap,mark,null);
+    public static Bitmap getWatermarkBitmap(Context context, Bitmap bitmap, String mark) {
+        return getWatermarkBitmap(context, bitmap, mark, null);
     }
 
-    public static Bitmap getWatermarkBitmap(Context context,Bitmap bitmap,String mark,String fontAssetPath){
+    public static Bitmap getWatermarkBitmap(Context context, Bitmap bitmap, String mark, String fontAssetPath) {
         String info = null;
-        return getWatermarkBitmap(context,bitmap,mark,fontAssetPath,info);
+        return getWatermarkBitmap(context, bitmap, mark, fontAssetPath, info);
     }
 
     /**
      * 注意：加载字体极为耗时
+     *
      * @param context
      * @param bitmap
      * @param mark
@@ -48,33 +49,35 @@ public class BitmapUtil {
      * @param infos
      * @return
      */
-    public static Bitmap getWatermarkBitmap(Context context,Bitmap bitmap,String mark,String fontAssetPath,String... infos){
-        if (fontAssetPath==null){
+    public static Bitmap getWatermarkBitmap(Context context, Bitmap bitmap, String mark, String fontAssetPath, String... infos) {
+        if (fontAssetPath == null) {
             fontAssetPath = "fonts/akong.ttf";
         }
         Typeface typeface = null;
-        if (AssetUtil.isFileExists(context,fontAssetPath)){
+        if (AssetUtil.isFileExists(context, fontAssetPath)) {
             typeface = Typeface.createFromAsset(context.getAssets(), fontAssetPath);
         }
-        return getWatermarkBitmap(bitmap,mark,typeface,infos);
+        return getWatermarkBitmap(bitmap, mark, typeface, infos);
     }
+
     /**
      * 图片打水印 并将信息内容合成到图片中
+     *
      * @param bitmap
-     * @param mark 水印
+     * @param mark     水印
      * @param typeface 字体 在某些型号下部分字体无法显示，导致文字无法绘制，建议更换字体
-     * @param infos 信息内容
-     * example:Bitmap bitmap1 = getWatermarkBitmap( bitmap, "快发网络","时间", "地点","执行人","媒体位置","订单号","方案名称");
+     * @param infos    信息内容
+     *                 example:Bitmap bitmap1 = getWatermarkBitmap( bitmap, "快发网络","时间", "地点","执行人","媒体位置","订单号","方案名称");
      * @return
      */
-    public static Bitmap getWatermarkBitmap(Bitmap bitmap,String mark,Typeface typeface,String... infos){
+    public static Bitmap getWatermarkBitmap(Bitmap bitmap, String mark, Typeface typeface, String... infos) {
         Bitmap newBmp = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.RGB_565);
         Canvas canvas = new Canvas(newBmp);
         canvas.drawBitmap(bitmap, 0, 0, null);  //绘制原始图片
         canvas.save();
 
         int minSize = bitmap.getWidth() < bitmap.getHeight() ? bitmap.getWidth() : bitmap.getHeight();
-        int textSize = minSize /10;
+        int textSize = minSize / 10;
 
         canvas.rotate(-45);
         int textColor = Color.BLACK;
@@ -84,7 +87,7 @@ public class BitmapUtil {
         paint.setDither(true);
         paint.setFilterBitmap(true);
         paint.setStrokeWidth(10);
-        if (typeface!=null){
+        if (typeface != null) {
             paint.setTypeface(typeface);
         }
 
@@ -102,45 +105,45 @@ public class BitmapUtil {
          * 计算起点位置
          * 超过有效长度则默认从有效起点开始，否则居中
          */
-        int middleLine1 = (int) (bitmap.getWidth()*1f/ratio);
-        int y1 = middleLine1+textHeight/2;
+        int middleLine1 = (int) (bitmap.getWidth() * 1f / ratio);
+        int y1 = middleLine1 + textHeight / 2;
         int x1 = 0;
 
-        if (bitmap.getHeight()>bitmap.getWidth()){
-            int totalWidth = (int) (bitmap.getWidth()*ratio);
+        if (bitmap.getHeight() > bitmap.getWidth()) {
+            int totalWidth = (int) (bitmap.getWidth() * ratio);
             int validWidth = totalWidth - textHeight;
-            if (textWidth>validWidth){
-                x1 = -validWidth/2;
-            }else {
-                x1 = -textWidth/2;
+            if (textWidth > validWidth) {
+                x1 = -validWidth / 2;
+            } else {
+                x1 = -textWidth / 2;
             }
-        }else {
-            int totalWidth = (int) (bitmap.getHeight()*ratio);
+        } else {
+            int totalWidth = (int) (bitmap.getHeight() * ratio);
             int validWidth = totalWidth - textHeight;
-            if (textWidth>validWidth){
-                x1 = (int) ((bitmap.getWidth()-2*bitmap.getHeight())/ratio+textHeight/2);
-            }else {
-                x1 = (int) ((bitmap.getWidth()-2*bitmap.getHeight())/ratio + (bitmap.getHeight()*ratio-textWidth)/2);
+            if (textWidth > validWidth) {
+                x1 = (int) ((bitmap.getWidth() - 2 * bitmap.getHeight()) / ratio + textHeight / 2);
+            } else {
+                x1 = (int) ((bitmap.getWidth() - 2 * bitmap.getHeight()) / ratio + (bitmap.getHeight() * ratio - textWidth) / 2);
             }
         }
         canvas.drawText(mark, x1, y1, paint);
 //        canvas.drawCircle(x1,y1,20,paint);
 
         //第二个文字
-        int middleLine2 = (int) (bitmap.getHeight()*1f/ratio);
-        int y2 = middleLine2+textHeight/2;
-        int x2 =0;
+        int middleLine2 = (int) (bitmap.getHeight() * 1f / ratio);
+        int y2 = middleLine2 + textHeight / 2;
+        int x2 = 0;
 
-        if (bitmap.getHeight()>bitmap.getWidth()){
-            int totalWidth = (int) (bitmap.getWidth()*ratio);
+        if (bitmap.getHeight() > bitmap.getWidth()) {
+            int totalWidth = (int) (bitmap.getWidth() * ratio);
             int validWidth = totalWidth - textHeight;
-            int dis = totalWidth>middleLine2 ? totalWidth-middleLine2 : 0;
-            if (textWidth>validWidth){
-                x2 = -(totalWidth-dis-textHeight/2);
-            }else {
-                x2 = -(totalWidth-dis-(totalWidth/2-textWidth/2));
+            int dis = totalWidth > middleLine2 ? totalWidth - middleLine2 : 0;
+            if (textWidth > validWidth) {
+                x2 = -(totalWidth - dis - textHeight / 2);
+            } else {
+                x2 = -(totalWidth - dis - (totalWidth / 2 - textWidth / 2));
             }
-        }else {
+        } else {
             int totalWidth = (int) (bitmap.getHeight() * ratio);
             int validWidth = totalWidth - textHeight;
             if (textWidth > validWidth) {
@@ -154,13 +157,13 @@ public class BitmapUtil {
         canvas.restore();
 
         Bitmap infoBitmap = getInfoBitmap(bitmap.getWidth(), bitmap.getHeight(), infos);
-        if (infoBitmap == null){
+        if (infoBitmap == null) {
             return newBmp;
         }
 
         int infoHeight = infoBitmap.getHeight();
         int top = bitmap.getHeight() - infoHeight;
-        canvas.drawBitmap(infoBitmap,0,top,null);
+        canvas.drawBitmap(infoBitmap, 0, top, null);
         infoBitmap.recycle();
         return newBmp;
     }
@@ -168,36 +171,37 @@ public class BitmapUtil {
 
     /**
      * 合成信息bitmap
+     *
      * @param width
      * @param height
      * @param infos
      * @return
      */
-    public static Bitmap getInfoBitmap(int width,int height,String... infos){
-        if (infos == null ){
+    public static Bitmap getInfoBitmap(int width, int height, String... infos) {
+        if (infos == null) {
             return null;
         }
-        if (width<=0 || height<=0){
+        if (width <= 0 || height <= 0) {
             return null;
         }
 
 
         float scale = 0.5f;
-        if (width>height){
-            scale=0.8f;
-        }else {
-            scale=0.6f;
+        if (width > height) {
+            scale = 0.8f;
+        } else {
+            scale = 0.6f;
         }
-        int itemHeight = (int) (height/2*scale/infos.length);
+        int itemHeight = (int) (height / 2 * scale / infos.length);
 
 //        int itemHeight = 40;
-        int bottomPadding = itemHeight/10;
-        int textSize = itemHeight -20;//50
-        if (textSize<20){
+        int bottomPadding = itemHeight / 10;
+        int textSize = itemHeight - 20;//50
+        if (textSize < 20) {
             textSize = 20;
         }
         int validHeight = infos.length * itemHeight + bottomPadding + bottomPadding;
-        if (validHeight>height){
+        if (validHeight > height) {
             validHeight = height;
         }
 
@@ -208,12 +212,12 @@ public class BitmapUtil {
 
         Bitmap newBmp = Bitmap.createBitmap(width, validHeight, Bitmap.Config.ARGB_4444);
         Canvas canvas = new Canvas(newBmp);
-        canvas.drawColor(Color.argb(180,0,0,0));//color:dark gray
+        canvas.drawColor(Color.argb(180, 0, 0, 0));//color:dark gray
 
-        for (int i = 0; i<infos.length; i++){
+        for (int i = 0; i < infos.length; i++) {
             String info = infos[i];
             int x = 20;//文字的左边距
-            int y = itemHeight*(i+1);
+            int y = itemHeight * (i + 1);
             canvas.drawText(info, x, y, paint);
         }
 
@@ -222,69 +226,86 @@ public class BitmapUtil {
     }
 
 
-
     /**
      * Converts YUV420 NV21 to RGB8888
      *
-     * @param data byte array on YUV420 NV21 format.
-     * @param width pixels width
+     * @param data   byte array on YUV420 NV21 format.
+     * @param width  pixels width
      * @param height pixels height
      * @return a RGB8888 pixels int array. Where each int is a pixels ARGB.
      */
-    public static int[] convertYUV420_NV21toRGB8888(byte [] data, int width, int height) {
-        int size = width*height;
+    public static int[] convertYUV420_NV21toRGB8888(byte[] data, int width, int height) {
+        int size = width * height;
         int offset = size;
         int[] pixels = new int[size];
         int u, v, y1, y2, y3, y4;
 
         // i percorre os Y and the final pixels
         // k percorre os pixles U e V
-        for(int i=0, k=0; i < size; i+=2, k+=2) {
-            y1 = data[i  ]&0xff;
-            y2 = data[i+1]&0xff;
-            y3 = data[width+i  ]&0xff;
-            y4 = data[width+i+1]&0xff;
+        for (int i = 0, k = 0; i < size; i += 2, k += 2) {
+            y1 = data[i] & 0xff;
+            y2 = data[i + 1] & 0xff;
+            y3 = data[width + i] & 0xff;
+            y4 = data[width + i + 1] & 0xff;
 
-            u = data[offset+k  ]&0xff;
-            v = data[offset+k+1]&0xff;
-            u = u-128;
-            v = v-128;
+            u = data[offset + k] & 0xff;
+            v = data[offset + k + 1] & 0xff;
+            u = u - 128;
+            v = v - 128;
 
-            pixels[i  ] = convertYUVtoRGB(y1, u, v);
-            pixels[i+1] = convertYUVtoRGB(y2, u, v);
-            pixels[width+i  ] = convertYUVtoRGB(y3, u, v);
-            pixels[width+i+1] = convertYUVtoRGB(y4, u, v);
+            pixels[i] = convertYUVtoRGB(y1, u, v);
+            pixels[i + 1] = convertYUVtoRGB(y2, u, v);
+            pixels[width + i] = convertYUVtoRGB(y3, u, v);
+            pixels[width + i + 1] = convertYUVtoRGB(y4, u, v);
 
-            if (i!=0 && (i+2)%width==0)
-                i+=width;
+            if (i != 0 && (i + 2) % width == 0)
+                i += width;
         }
 
         return pixels;
     }
 
     private static int convertYUVtoRGB(int y, int u, int v) {
-        int r,g,b;
+        int r, g, b;
 
-        r = y + (int)(1.402f*v);
-        g = y - (int)(0.344f*u +0.714f*v);
-        b = y + (int)(1.772f*u);
-        r = r>255? 255 : r<0 ? 0 : r;
-        g = g>255? 255 : g<0 ? 0 : g;
-        b = b>255? 255 : b<0 ? 0 : b;
-        return 0xff000000 | (b<<16) | (g<<8) | r;
+        r = y + (int) (1.402f * v);
+        g = y - (int) (0.344f * u + 0.714f * v);
+        b = y + (int) (1.772f * u);
+        r = r > 255 ? 255 : r < 0 ? 0 : r;
+        g = g > 255 ? 255 : g < 0 ? 0 : g;
+        b = b > 255 ? 255 : b < 0 ? 0 : b;
+        return 0xff000000 | (b << 16) | (g << 8) | r;
     }
 
     /**
      * 摄像头预览原数据byte[] 转 bitmap
+     *
      * @param data
      * @param size
      * @return
      */
-    public static Bitmap cameraToBitmap(byte[] data, Camera.Size size){
+    public static Bitmap cameraPreviewDataToBitmap(byte[] data, Camera.Size size) {
         int width = size.width;
         int height = size.height;
+        return cameraPreviewDataToBitmap(data, width, height);
+    }
+
+    public static Bitmap cameraPreviewDataToBitmap(byte[] data, int width, int height) {
+        Bitmap bm = cameraPreviewDataToBitmap(data,width,height,0);
+        return bm;
+    }
+
+    public static Bitmap cameraPreviewDataToBitmap(byte[] data, int width, int height,int degree) {
+        if (data==null || width==0 || height==0){
+            return null;
+        }
         int[] pixels = convertYUV420_NV21toRGB8888(data, width, height);
         Bitmap bm = Bitmap.createBitmap(pixels, width, height, Bitmap.Config.ARGB_8888);
+        if (degree%360!=0){
+            Bitmap bitmap = rotateBitmap(bm, degree);
+            bm.recycle();
+            bm = bitmap;
+        }
         return bm;
     }
 
@@ -294,11 +315,12 @@ public class BitmapUtil {
      * 摄像头预览原数据byte[] 转 bitmap
      * compressToJpeg 有内存溢出
      * 长时间调用不推荐此方法
+     *
      * @param data
      * @param size
      * @return
      */
-    public static Bitmap cameraToBitmap(byte[] data, Camera.Size size, Rect rect) {
+    public static Bitmap cameraPreviewDataToBitmap(byte[] data, Camera.Size size, Rect rect) {
         Bitmap bmp = null;
         try {
             if (rect == null) {
@@ -328,13 +350,20 @@ public class BitmapUtil {
      * @return
      */
     public static String cameraPreByteToBase64(byte[] data, Camera.Size previewSize) {
+        return cameraPreByteToBase64(data, previewSize.width, previewSize.height);
+    }
+
+    public static String cameraPreByteToBase64(byte[] data, int width, int height) {
+        if (data==null || width==0 || height==0){
+            return null;
+        }
         BitmapFactory.Options newOpts = new BitmapFactory.Options();
         newOpts.inJustDecodeBounds = true;
         YuvImage yuvimage = new YuvImage(data, ImageFormat.NV21,
-                previewSize.width, previewSize.height, null);
+                width, height, null);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        yuvimage.compressToJpeg(new Rect(0, 0, previewSize.width,
-                previewSize.height), 100, baos);// 80--JPG图片的质量[0-100],100最高
+        yuvimage.compressToJpeg(new Rect(0, 0, width,
+                height), 100, baos);// 80--JPG图片的质量[0-100],100最高
         byte[] rawImage = baos.toByteArray();
         // 将rawImage转换成bitmap
         return Base64.encodeToString(rawImage, Base64.DEFAULT);
@@ -369,8 +398,8 @@ public class BitmapUtil {
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
 
-    public static String getBase64(Bitmap bitmap){
-        if (bitmap==null){
+    public static String getBase64(Bitmap bitmap) {
+        if (bitmap == null) {
             return null;
         }
 
@@ -383,7 +412,7 @@ public class BitmapUtil {
             out.flush();
             out.close();
             byte[] imgBytes = out.toByteArray();
-            bitmap.recycle();
+//            bitmap.recycle();
             return Base64.encodeToString(imgBytes, Base64.DEFAULT);
         } catch (IOException e) {
             e.printStackTrace();
@@ -408,8 +437,8 @@ public class BitmapUtil {
      */
     public static String getBase64(String imgPath) {
         File file = new File(imgPath);
-        if (!file.exists()){
-            LogUtils.w("file [" + imgPath +"] not exist");
+        if (!file.exists()) {
+            LogUtils.w("file [" + imgPath + "] not exist");
             return null;
         }
 
@@ -474,6 +503,9 @@ public class BitmapUtil {
 
     public static boolean saveBitmap(Bitmap mybitmap, String path) {
         boolean result = false;
+        if (mybitmap == null) {
+            return false;
+        }
 
         File file = new File(path);
         if (!file.getParentFile().exists()) {
@@ -499,6 +531,40 @@ public class BitmapUtil {
 
         return result;
     }
+
+    /**
+     * 获取bitmap 按照某个比例的bitmap
+     * 如获取16：9的bitmap
+     *
+     * @param origin
+     * @param wratio
+     * @param hratio
+     * @return
+     */
+    public static Bitmap getRatioBitmap(Bitmap origin, int wratio, int hratio) {
+        int width = origin.getWidth();
+        int height = origin.getHeight();
+        int newWidth = 0;
+        int newHeight = 0;
+        if (width < height) {
+            int unit = width / wratio;
+            newWidth = unit * wratio;
+            newHeight = unit * hratio;
+        } else {
+            int unit = height / hratio;
+            newWidth = unit * wratio;
+            newHeight = unit * hratio;
+        }
+
+        float wScale = newWidth * 1f / width;
+        float hScale = newHeight * 1f / height;
+        Matrix matrix = new Matrix();
+        matrix.preScale(wScale, hScale);
+        LogUtils.e("rxLibface", "bitmap " + width + "*" + height + "  -----------> " + newWidth + "*" + newHeight);
+        Bitmap newBM = Bitmap.createBitmap(origin, 0, 0, width, height, matrix, false);
+        return newBM;
+    }
+
 
     /**
      * 从指定路径下读取图片，并获取其EXIF信息。
@@ -575,9 +641,21 @@ public class BitmapUtil {
         return getCompressBitmap(path, 10, 80);
     }
 
+
+    /**
+     *  资源图片回收
+     * @param bitmap
+     */
+    public static void recycle(Bitmap bitmap) {
+        if (bitmap != null && !bitmap.isRecycled()) {
+            bitmap.recycle();
+        }
+    }
+
     /**
      * 获取指定大小的bitmap
      * 会拉伸
+     *
      * @param orgBitmap ：源图片资源
      * @param newWidth  ：缩放后宽度
      * @param newHeight ：缩放后高度
@@ -643,8 +721,6 @@ public class BitmapUtil {
     }
 
 
-
-
     /**
      * 将Bitmap对象转换成Drawable对象
      *
@@ -678,17 +754,17 @@ public class BitmapUtil {
         return bitmap;
     }
 
-    public static byte[] compress(byte[] data, int width, int height){
+    public static byte[] compress(byte[] data, int width, int height) {
         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
         Bitmap bitmap1 = getBitmapBySize2(bitmap, width, height);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap1.compress(Bitmap.CompressFormat.JPEG,80,stream);
+        bitmap1.compress(Bitmap.CompressFormat.JPEG, 80, stream);
         try {
             stream.flush();
             stream.close();
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             bitmap.recycle();
             bitmap1.recycle();
         }

@@ -61,11 +61,18 @@ public class DiskLogStrategy implements LogStrategy {
         public void handleMessage(Message msg) {
             String content = (String) msg.obj;
 
-            String subTag = getSubTagName(content);
+            String subTag = getSubTagName(content,false);
+            String mainTag = getSubTagName(content,true);
 
+
+            File logFile = getLogFile(folder, subTag, subTag);
+            write(content, logFile);
+//            File mainFile = getLogFile(folder, mainTag, "logs");
+//            write(content, mainFile);
+        }
+
+        private void write(String content, File logFile) {
             FileWriter fileWriter = null;
-            File logFile = getLogFile(folder, subTag, "logs");
-
             try {
                 fileWriter = new FileWriter(logFile, true);
 
@@ -98,7 +105,7 @@ public class DiskLogStrategy implements LogStrategy {
 
             String date = DateUtil.getDateString(new Date(), DateUtil.FORMAT_YMD);
             String path = folderName + File.separator + date + File.separator + subFolderName;
-            File folder = new File(path.toLowerCase());
+            File folder = new File(path);
             if (!folder.exists()) {
                 //TODO: What if folder is not created, what happens then?
                 folder.mkdirs();
@@ -131,8 +138,7 @@ public class DiskLogStrategy implements LogStrategy {
          * @param mes 格式 I/libsample-util : xxxx(非终端打印格式，见文件保存格式)
          * @return
          */
-        public static String getSubTagName(String mes) {
-
+        public static String getSubTagName(String mes,boolean isMain) {
             String defaultTag = "defaultTag";
             String rgex = "/(.*?) : ";
             Pattern pattern = Pattern.compile(rgex);// 匹配的模式
@@ -145,6 +151,10 @@ public class DiskLogStrategy implements LogStrategy {
             if (group.contains("-")) {
                 int start = group.indexOf("-") + 1;
                 String maintTag = group.substring(0, start - 1);
+                if (isMain){
+                    return maintTag;
+                }
+
                 if (start == group.length()) {
                     return maintTag;
                 }

@@ -3,7 +3,9 @@ apply plugin: 'com.android.library'
 android {
     compileSdkVersion 26
 
-
+    lintOptions {
+        abortOnError false
+    }
 
     defaultConfig {
         minSdkVersion 16
@@ -27,17 +29,20 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.github.bumptech.glide:glide:3.7.0'//图片加载库
-    implementation 'com.orhanobut:logger:2.1.1'//log日志库
-    implementation 'com.google.code.gson:gson:2.8.0'//json解析库
+    compile 'com.github.bumptech.glide:glide:3.7.0'//图片加载库
+    compile 'com.orhanobut:logger:2.1.1'//log日志库
+    compile 'com.google.code.gson:gson:2.8.5'//json解析库
 
-    implementation 'com.readystatesoftware.chuck:library:1.0.4'
+    compile 'com.readystatesoftware.chuck:library:1.0.4'
     compile 'com.lzy.net:okgo:3.0.4'//网络请求库
-    implementation 'com.lzy.net:okrx2:2.0.2'//rxjava2依赖
-    implementation 'com.lzy.net:okserver:2.0.5'//上传下载库
-    implementation 'com.yanzhenjie:permission:2.0.0-rc3' //权限控制
-    implementation 'com.yanzhenjie.alertdialog:alertdialog:1.0.1'//权限控制依赖的dialog
+    compile 'com.lzy.net:okrx2:2.0.2'//rxjava2依赖
+    compile 'com.lzy.net:okserver:2.0.5'//上传下载库
+    compile 'com.yanzhenjie:permission:2.0.0-rc3' //权限控制
+    compile 'com.yanzhenjie.alertdialog:alertdialog:1.0.1'//权限控制依赖的dialog
+    compile 'commons-net:commons-net:3.6'//ftp
+
+    
 
 }

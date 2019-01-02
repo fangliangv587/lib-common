@@ -12,7 +12,11 @@ public abstract class SimpleCallback<T> extends JsonCallback<T> {
 
     @Override
     public void onSuccess(Response<T> response) {
-        onSuccess(response.body());
+        if (response.body()==null){
+            onError("数据解析异常");
+        }else {
+            onSuccess(response.body());
+        }
     }
 
     @Override

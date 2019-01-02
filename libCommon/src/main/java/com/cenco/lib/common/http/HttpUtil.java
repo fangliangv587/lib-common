@@ -16,6 +16,8 @@ import com.lzy.okgo.https.HttpsUtils;
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
 import com.lzy.okgo.model.HttpHeaders;
 import com.lzy.okgo.model.HttpParams;
+import com.lzy.okgo.request.GetRequest;
+import com.lzy.okgo.request.PostRequest;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,10 +35,10 @@ import okhttp3.Response;
 
 public class HttpUtil {
 
-    public static final String TAG = HttpUtil.class.getSimpleName();
-
     //初始化
     private static boolean isInit = false;
+
+    public static final String TAG = HttpUtil.class.getSimpleName();
     //接口mock
     private static boolean ismock = false;
 
@@ -44,6 +46,8 @@ public class HttpUtil {
 
 
     private static ApiMock mockManger;
+
+    private static OkHttpClient okHttpClient;
 
     /**
      * 初始化
@@ -102,8 +106,10 @@ public class HttpUtil {
         HttpsUtils.SSLParams sslParams1 = HttpsUtils.getSslSocketFactory();
         builder.sslSocketFactory(sslParams1.sSLSocketFactory, sslParams1.trustManager);
 
+        okHttpClient = builder.build();
+
         OkGo.getInstance().init(app)                       //必须调用初始化
-                .setOkHttpClient(builder.build())               //建议设置OkHttpClient，不设置将使用默认的
+                .setOkHttpClient(okHttpClient)               //建议设置OkHttpClient，不设置将使用默认的
                 .setCacheMode(CacheMode.NO_CACHE)               //全局统一缓存模式，默认不使用缓存，可以不传
                 .setCacheTime(CacheEntity.CACHE_NEVER_EXPIRE)   //全局统一缓存时间，默认永不过期，可以不传
                 .setRetryCount(0);                              //全局统一超时重连次数，默认为三次，那么最差的情况会请求4次(一次原始请求，三次重连请求)，不需要可以设置为0
@@ -148,10 +154,11 @@ public class HttpUtil {
      * @param callback
      * @param <T>
      */
-    public static <T> void get(String url, HttpParams params, Callback<T> callback) {
+    public static <T> void get(Object tag,String url, HttpParams params, Callback<T> callback) {
         if (url == null) return;
+        checkInit();
         url = getParamsUrl(url, params);
-        get(url, callback);
+        get(tag,url, callback);
     }
 
     /**
@@ -165,6 +172,7 @@ public class HttpUtil {
         if (url == null) {
             return null;
         }
+        checkInit();
         url = getParamsUrl(url, params);
         return getSync(url);
     }
@@ -176,13 +184,27 @@ public class HttpUtil {
      * @param callback
      * @param <T>
      */
-    public static <T> void get(String url, Callback<T> callback) {
+    public static <T> void get(Object tag,String url, Callback<T> callback) {
+        get(tag, url,null,CacheMode.DEFAULT,0,callback);
+    }
+
+    public static <T> void get(Object tag,String url, HttpParams params,CacheMode cacheMode,long cacheTime, Callback<T> callback) {
+        if (url == null) return;
+        url = getParamsUrl(url, params);
         checkInit();
         if (ismock) {
             mockManger.interruptWeb(url, callback);
             return;
         }
-        OkGo.<T>get(url).execute(callback);
+        GetRequest<T> request = OkGo.<T>get(url);
+        if (tag!=null){
+            request.tag(tag);
+        }
+
+        if (cacheMode!=null){
+            request.cacheMode(cacheMode).cacheTime(cacheTime);
+        }
+        request.execute(callback);
     }
 
     /**
@@ -221,13 +243,17 @@ public class HttpUtil {
      * @param callback
      * @param <T>
      */
-    public static <T> void post(String url, HttpParams params, Callback<T> callback) {
+    public static <T> void post(Object tag,String url, HttpParams params, Callback<T> callback) {
         checkInit();
         if (ismock) {
             mockManger.interruptWeb(url, callback);
             return;
         }
-        OkGo.<T>post(url).params(params).execute(callback);
+        PostRequest<T> request = OkGo.<T>post(url).params(params);
+        if (tag!=null){
+            request.tag(tag);
+        }
+        request.execute(callback);
     }
 
 
@@ -248,7 +274,7 @@ public class HttpUtil {
             LogUtils.v(TAG,getPostParams(params));
             Response response = OkGo.post(url).params(params).execute();
             String body = response.body().string();
-            LogUtils.d(TAG,"post sync response ===> "+body);
+            LogUtils.d(TAG,"post sync response {"+url+"}===> "+body);
             return body;
         } catch (IOException e) {
             LogUtils.e(TAG,e);
@@ -329,7 +355,13 @@ public class HttpUtil {
 
             StringBuilder result = new StringBuilder();
             for (ConcurrentHashMap.Entry<String, List<String>> entry : params.urlParamsMap.entrySet()) {
-                result.append(entry.getKey()).append(":").append(entry.getValue().get(0)).append("\n");
+                String key = entry.getKey();
+                String value = entry.getValue().get(0);
+                if (value!=null&& value.length()>100){
+                    value=value.substring(0,100);
+                    value=value+"...{length:"+value.length()+"}";
+                }
+                result.append(key).append(":").append(value).append("\n");
             }
 
            return result.toString();
@@ -338,4 +370,9 @@ public class HttpUtil {
     }
 
 
+    public static void cancel(Object tag) {
+        if (okHttpClient!=null && tag!=null){
+            OkGo.cancelTag(okHttpClient,tag);
+        }
+    }
 }

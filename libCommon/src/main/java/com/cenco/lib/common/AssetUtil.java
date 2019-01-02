@@ -114,6 +114,11 @@ public class AssetUtil {
                         LogUtils.e("util", "delete() FAIL:" + fileOut.getAbsolutePath());
                     }
                 }
+
+                if(!fileOut.getParentFile().exists()){
+                    fileOut.getParentFile().mkdirs();
+                }
+
                 boolean ret = fileOut.createNewFile();
                 if (!ret) {
                     LogUtils.e("util", "createNewFile() FAIL:" + fileOut.getAbsolutePath());
